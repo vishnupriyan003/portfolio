@@ -4,7 +4,7 @@
 **Stack:** Laravel 9.52.23 · PHP 8.0.30 (XAMPP) · MySQL · Vanilla CSS/JS (Blade single page)
 **Live site:** https://vishnupriyanweb.free.nf/ (InfinityFree)
 **Started:** 2026-11-19
-**Last updated:** Phase 1 complete (design system)
+**Last updated:** Phase 2 complete (assets acquired)
 
 ---
 
@@ -14,7 +14,7 @@
 |------|-----------|--------|--------|
 | **0** | Full read-only audit (architecture, features, design proposal, libraries, assets, plan, risks) | ✅ **Complete** | Approved by user; findings below |
 | **1** | Design system: git safety net, `PROJECT_STATUS.md`, nature-palette tokens in `style.css` (`:root` only) | ✅ **Complete** | Report below |
-| **2** | Asset acquisition: stock hero video + poster, optimize images, `ASSET_CREDITS.md` | ⬜ Not started | Requires Phase 1 approval |
+| **2** | Asset acquisition: stock hero video + poster, optimize images, `ASSET_CREDITS.md` | ✅ **Complete** | Report below |
 | **3** | UI foundation: header/nav rebuild, scroll progress, skip link, inline SVG icons (drop Font Awesome CDN) | ⬜ Not started | |
 | **4** | Cinematic hero: full-screen muted looping video + poster + fallback, rotating designation, Hire Me / Download Resume, scroll cue | ⬜ Not started | |
 | **5** | Content sections: About, Skills, Experience, Projects, Education/Certs, Achievements (omitted for now), Contact, Footer — resume-backed only; **removes DEV QUEST game panel** | ⬜ Not started | |
@@ -89,7 +89,28 @@
 
 ---
 
+## Phase 2 Report (Complete)
+
+**Tooling installed** (all outside the project, in session temp): `sharp` (image/WebP), `ffmpeg` 6.1.1 + `ffprobe` (video). Project gained **no** node_modules.
+
+1. **Hero video — `assets/videos/hero-forest.mp4` (3.47 MB ✅ ≤ 4 MB)**
+   - Source: Mixkit *"Raining in a cloud forest full of tall trees"* — **Mixkit Free License** (commercial OK, no attribution required), license page verified.
+   - 1280×720 · 24 fps · 11.46 s · H.264 · **video-only stream** (no audio → inherently muted loop) · remuxed `+faststart` for progressive streaming (no re-encode).
+   - Selection: 6 candidates probed on the CDN; two misty-forest clips downloaded and **frames visually inspected**; clip `22729` discarded (footage didn't match its listing).
+2. **Poster/fallback — `hero-forest-poster.jpg` (88 KB) + `.webp` (72 KB)**, 1280×720, extracted from the clip's opening frame (matches first paint).
+3. **Image optimization — `image/*` 8.5 MB → 683 KB (-92%)**: all 9 files recompressed **in place** (same name/format → admin `settings` paths unbroken), every file ≤ 130 KB, `.webp` twins added. Verified decoding + HTTP 200. Originals recoverable from git baseline `c8a0c1b`.
+4. **`assets/textures/grain.png` (15 KB) / `.webp` (11 KB)** — self-authored 128×128 tileable film grain (procedural, zero third-party rights) for the cinematic overlay.
+5. **`assets/` tree created**: `images · videos · backgrounds · textures · icons · generated · documentation · fonts`.
+6. **`ASSET_CREDITS.md`** — every asset recorded with source URL, license terms, verification date, origin; includes a "Not used" section (31 MB unverified clip, missing `bg.mp4`, mismatched `22729`) and the ongoing acquisition policy.
+
+**Acceptance checks:** video ≤ 4 MB ✅ · poster ≤ 150 KB ✅ · all images ≤ 150 KB ✅ · license verified & documented ✅ · nothing hotlinked ✅ · no AI-generated assets needed ✅.
+
+**Next:** Phase 3 — UI foundation (header/nav rebuild, scroll progress, skip link, inline SVG icons replacing the Font Awesome CDN, self-hosted fonts).
+
+---
+
 ## Log
 
 - **Phase 0** — Read-only audit completed and approved.
 - **Phase 1** — ✅ Complete. `.gitignore` created; git baseline `c8a0c1b` (90 files); zip backup written (41.6 MB); `PROJECT_STATUS.md` created; `style.css` `:root` reworked into the nature design system; all legacy teal/gold literals routed through tokens; verified HTTP 200 + brace balance + zero old-palette colors. Commit: `phase-1-design-tokens`.
+- **Phase 2** — ✅ Complete. Hero video `assets/videos/hero-forest.mp4` (Mixkit Free License, 3.47 MB, faststart, silent) + poster jpg/webp; `image/*` 8.5 MB → 683 KB with WebP twins; self-authored grain texture; `assets/` tree; `ASSET_CREDITS.md` with verified license terms. Commit: `phase-2-assets`.

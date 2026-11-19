@@ -1,0 +1,61 @@
+# ASSET CREDITS — Vishnupriyan Portfolio (nature-cinematic redesign)
+
+Every asset used on this site is **stored locally** in `assets/` (or `image/`) — nothing is hotlinked from third-party CDNs.
+Legend: **Source** = where it came from · **License** = usage terms verified on the stated date · **Origin** = downloaded / self-generated / pre-existing.
+
+---
+
+## Videos
+
+| File | Source | License | Origin | Notes |
+|------|--------|---------|--------|-------|
+| `assets/videos/hero-forest.mp4` | Mixkit — *"Raining in a cloud forest full of tall trees"* (mixkit.co/free-stock-video/raining-in-a-cloud-forest-full-of-tall-trees-22728/) | Mixkit Free License — free for commercial & non-commercial use, **no attribution required**; the clip itself may not be redistributed/resold as stock. Verified: https://mixkit.co/license/ (2026-11-19) | downloaded 2026-11-19 | 1280×720 · 24 fps · 11.46 s · H.264 · video-only stream (no audio, ideal for muted loop) · faststart remuxed · **3.47 MB** (≤ 4 MB target) |
+
+## Poster / fallback images
+
+| File | Source | License | Origin | Notes |
+|------|--------|---------|--------|-------|
+| `assets/videos/hero-forest-poster.jpg` (88 KB) · `.webp` (72 KB) | first frame of `hero-forest.mp4` (Mixkit clip above) | Same Mixkit Free License as the video | downloaded | 1280×720 — shown while the video loads (`preload="metadata"`), and as the static/mobile fallback. No hotlinking. |
+
+## Backgrounds & textures
+
+| File | Source | License | Origin | Notes |
+|------|--------|---------|--------|-------|
+| `assets/textures/grain.png` · `.webp` | authored for this project (procedural noise) | 100% own asset — no third-party rights | self-generated | 128×128 tileable film-grain overlay, cream-tinted, alpha ≤ ~18% |
+
+## Site images (`image/` — pre-existing, optimized in place)
+
+All files below already existed in the project. Phase 2 **recompressed them in place** (same filename & format, so admin-managed `settings` paths keep working) and added a `.webp` twin for future `<picture>` use. Originals remain recoverable from git baseline `c8a0c1b`.
+
+| File | Before | After | WebP twin | Origin |
+|------|--------|-------|-----------|--------|
+| `image/Arduino.jpeg` | 1,135 KB (3200×2316) | 116 KB (1100×796) | 98 KB | pre-existing |
+| `image/css.jpg` | 1,588 KB (4961×3780) | 40 KB (1000×762) | 29 KB | pre-existing |
+| `image/sql.jpg` | 1,586 KB (4961×3780) | 40 KB (1000×762) | 29 KB | pre-existing |
+| `image/html.png` | 116 KB (1045×721) | 36 KB (900×621) | 20 KB | pre-existing |
+| `image/icon.png` | 28 KB (500×500) | 8 KB | 14 KB | pre-existing |
+| `image/logo.png` | 56 KB (350×350) | 14 KB | 12 KB | pre-existing |
+| `image/respage1.jpg` | 1,374 KB (2481×3509) | 128 KB (1200×1697) | 112 KB | pre-existing |
+| `image/respage2.jpg` | 1,430 KB (2481×3509) | 129 KB (1200×1697) | 115 KB | pre-existing |
+| `image/vishnupriyan_r.jpg` | 220 KB (1152×1440) | 120 KB | 69 KB | pre-existing |
+
+**Total: 8.5 MB → 683 KB (-92%)**, every image ≤ 130 KB.
+
+> Provenance note: the original `image/*` files were already in the project before this redesign; their upstream source is unknown. They are personal/portfolio content (skill graphics, resume-page previews, profile photo) used to represent the owner's own work. If any is later found to be third-party material, replace it with a licensed asset from the list above.
+
+## Not used
+
+| Item | Reason |
+|------|--------|
+| `new theme/12716-241674181.mp4` (31.1 MB) | Source/license unverified → excluded from the design by user decision (Phase 0). Left in place; not deleted. |
+| `bg.mp4` | Referenced by the current hero but **missing from the project** (404) — replaced by the licensed clip above in Phase 4. |
+| Mixkit clip `22729` ("Gloomy forest…", 4.1 MB) | Downloaded during Phase 2 selection but its actual footage was **not** a forest (listing/asset mismatch) → discarded, not used. |
+
+---
+
+## Policy
+
+1. Prefer free stock sources: **Pexels, Pixabay, Mixkit, Coverr** — verify the license page before downloading.
+2. Never hotlink; always download into `assets/`, then optimize (WebP/AVIF images, compressed video + poster).
+3. AI-generated assets only when no suitable free stock exists — each one recorded here with its generator and prompt.
+4. Every new file added in later phases **must** get a row here in the same commit.
