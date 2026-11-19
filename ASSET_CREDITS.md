@@ -23,6 +23,17 @@ Legend: **Source** = where it came from · **License** = usage terms verified on
 |------|--------|---------|--------|-------|
 | `assets/textures/grain.png` · `.webp` | authored for this project (procedural noise) | 100% own asset — no third-party rights | self-generated | 128×128 tileable film-grain overlay, cream-tinted, alpha ≤ ~18% |
 
+## Fonts (self-hosted, `assets/fonts/`)
+
+No font is hotlinked — all files live in the project and are preloaded via `@font-face` with `font-display: swap`.
+
+| File(s) | Family | License | Origin | Notes |
+|---------|--------|---------|--------|-------|
+| `fraunces-latin-500-normal.woff2` (17.6 KB) · `fraunces-latin-600-normal.woff2` (17.7 KB) | **Fraunces** — display serif (headings) | SIL Open Font License 1.1 (`OFL-Fraunces.txt` in this folder) | downloaded via official `@fontsource/fraunces` npm package (2026-11-19) | latin subset only |
+| `inter-latin-400/500/600/700/800-normal.woff2` (23–24 KB each) | **Inter** — UI/body sans | SIL Open Font License 1.1 (`OFL-Inter.txt`) | downloaded via official `@fontsource/inter` npm package (2026-11-19) | latin subset only |
+
+Total font payload: ~154 KB (7 files, woff2, subsetted to latin).
+
 ## Site images (`image/` — pre-existing, optimized in place)
 
 All files below already existed in the project. Phase 2 **recompressed them in place** (same filename & format, so admin-managed `settings` paths keep working) and added a `.webp` twin for future `<picture>` use. Originals remain recoverable from git baseline `c8a0c1b`.

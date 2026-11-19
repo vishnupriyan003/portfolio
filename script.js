@@ -92,7 +92,14 @@ const observer = new IntersectionObserver(
       }
 
       navLinks.forEach((link) => {
-        link.classList.toggle("active", link.getAttribute("href") === `#${entry.target.id}`);
+        const isActive = link.getAttribute("href") === `#${entry.target.id}`;
+        link.classList.toggle("active", isActive);
+
+        if (isActive) {
+          link.setAttribute("aria-current", "location");
+        } else {
+          link.removeAttribute("aria-current");
+        }
       });
     });
   },
@@ -153,3 +160,37 @@ document.addEventListener("keydown", (event) => {
     closeLightbox();
   }
 });
+
+// Scroll progress bar + condensed header (Phase 3) — rAF-throttled
+const progressBar = document.querySelector(".scroll-progress span");
+const siteHeader = document.querySelector(".site-header");
+let scrollTicking = false;
+
+function paintScrollState() {
+  const doc = document.documentElement;
+  const scrollable = doc.scrollHeight - doc.clientHeight;
+  const percent = scrollable > 0 ? Math.min(100, (doc.scrollTop / scrollable) * 100) : 0;
+
+  if (progressBar) {
+    progressBar.style.width = `${percent}%`;
+  }
+
+  if (siteHeader) {
+    siteHeader.classList.toggle("is-scrolled", window.scrollY > 24);
+  }
+
+  scrollTicking = false;
+}
+
+window.addEventListener(
+  "scroll",
+  () => {
+    if (!scrollTicking) {
+      scrollTicking = true;
+      requestAnimationFrame(paintScrollState);
+    }
+  },
+  { passive: true }
+);
+
+paintScrollState();

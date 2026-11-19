@@ -4,7 +4,7 @@
 **Stack:** Laravel 9.52.23 · PHP 8.0.30 (XAMPP) · MySQL · Vanilla CSS/JS (Blade single page)
 **Live site:** https://vishnupriyanweb.free.nf/ (InfinityFree)
 **Started:** 2026-11-19
-**Last updated:** Phase 2 complete (assets acquired)
+**Last updated:** Phase 3 complete (UI foundation)
 
 ---
 
@@ -15,7 +15,7 @@
 | **0** | Full read-only audit (architecture, features, design proposal, libraries, assets, plan, risks) | ✅ **Complete** | Approved by user; findings below |
 | **1** | Design system: git safety net, `PROJECT_STATUS.md`, nature-palette tokens in `style.css` (`:root` only) | ✅ **Complete** | Report below |
 | **2** | Asset acquisition: stock hero video + poster, optimize images, `ASSET_CREDITS.md` | ✅ **Complete** | Report below |
-| **3** | UI foundation: header/nav rebuild, scroll progress, skip link, inline SVG icons (drop Font Awesome CDN) | ⬜ Not started | |
+| **3** | UI foundation: header/nav rebuild, scroll progress, skip link, inline SVG icons (drop Font Awesome CDN), self-hosted fonts | ✅ **Complete** | Report below |
 | **4** | Cinematic hero: full-screen muted looping video + poster + fallback, rotating designation, Hire Me / Download Resume, scroll cue | ⬜ Not started | |
 | **5** | Content sections: About, Skills, Experience, Projects, Education/Certs, Achievements (omitted for now), Contact, Footer — resume-backed only; **removes DEV QUEST game panel** | ⬜ Not started | |
 | **6** | Animations: CSS + IntersectionObserver reveals/hovers first; vendored GSAP/ScrollTrigger/Lenis **only if needed**; `prefers-reduced-motion` respected | ⬜ Not started | |
@@ -109,8 +109,26 @@
 
 ---
 
+## Phase 3 Report (Complete)
+
+**Files changed:** `main/resources/views/portfolio.blade.php`, **new** `main/resources/views/components/icon.blade.php`, `style.css`, `script.js`, **new** `assets/fonts/*` (8 files).
+
+1. **Font Awesome CDN eliminated** — the only third-party request in the page is gone. 13 `<i class="fas/fab…">` usages replaced by a **new inline-SVG icon component** (`<x-icon name="…" />`, 15-icon stroke set authored here: code, server, database, tools, laptop, download, trending, check, award, pdf, send, envelope, phone, github, linkedin). Legacy `fa-*` names from the DB (`fa-code`, `fa-server`, `fa-database`, `fa-tools`) are auto-stripped and mapped, so stored content keeps working. Icons are `aria-hidden` by default; meaning-bearing ones can take `label`.
+2. **Self-hosted typography** — Fraunces (display, 500/600) for headings + Inter (400–800) for UI/body, latin-subset woff2, `font-display: swap`, `@font-face` in `style.css`, critical files **preloaded** in `<head>`. ~154 KB total; OFL license texts stored beside them.
+3. **Skip link** — first focusable element, `href="#main"`, visible only on keyboard focus; `<main id="main" tabindex="-1">` added as the target.
+4. **Scroll progress bar** — 3 px earth→gold gradient fixed bar, rAF-throttled width updates (no layout thrash), hidden from AT (`aria-hidden`).
+5. **Header refinement** — `.is-scrolled` condense state (tighter top offset, denser shadow) toggled on >24 px scroll; transition respects `prefers-reduced-motion` (global reduced-motion rule).
+6. **Nav a11y** — active link now also carries `aria-current="location"` alongside the existing `.active` scroll-spy class.
+
+**Acceptance checks:** `node --check` OK · CSS braces 243/243 · page HTTP 200 (25.6 KB) · **0** cdnjs/FA references in output · 18 inline SVGs rendered · all 4 DB skill icons resolved (`icon-code/server/database/tools`) · fonts/video/texture all HTTP 200 · title unchanged.
+
+**Next:** Phase 4 — cinematic hero (wire the new video + poster + fallback into the blade, designation animation, Hire Me / Download Resume CTAs, scroll cue, particles).
+
+---
+
 ## Log
 
 - **Phase 0** — Read-only audit completed and approved.
 - **Phase 1** — ✅ Complete. `.gitignore` created; git baseline `c8a0c1b` (90 files); zip backup written (41.6 MB); `PROJECT_STATUS.md` created; `style.css` `:root` reworked into the nature design system; all legacy teal/gold literals routed through tokens; verified HTTP 200 + brace balance + zero old-palette colors. Commit: `phase-1-design-tokens`.
 - **Phase 2** — ✅ Complete. Hero video `assets/videos/hero-forest.mp4` (Mixkit Free License, 3.47 MB, faststart, silent) + poster jpg/webp; `image/*` 8.5 MB → 683 KB with WebP twins; self-authored grain texture; `assets/` tree; `ASSET_CREDITS.md` with verified license terms. Commit: `phase-2-assets`.
+- **Phase 3** — ✅ Complete. Font Awesome CDN removed → 15-icon inline SVG component (DB `fa-*` names mapped); Fraunces + Inter self-hosted (OFL, preloaded); skip link + `#main` target; rAF scroll-progress bar; condensed header state; `aria-current` nav. Commit: `phase-3-ui-foundation`.

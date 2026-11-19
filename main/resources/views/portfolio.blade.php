@@ -21,7 +21,8 @@
   <meta name="twitter:image" content="{{ asset('image/vishnupriyan_r.jpg') }}">
   <link rel="icon" type="image/png" href="{{ asset('image/icon.png') }}">
   <title>{{ $content['seo_title'] }}</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="preload" href="{{ asset('assets/fonts/fraunces-latin-600-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ asset('assets/fonts/inter-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{{ asset('style.css') }}">
   @php
     $schema = [
@@ -40,6 +41,9 @@
   <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+
   <div class="preloader" id="preloader" role="status" aria-live="polite" aria-label="Loading portfolio">
     <div class="preloader-card">
       <img src="{{ asset('image/logo.png') }}" alt="">
@@ -75,18 +79,18 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main" tabindex="-1">
     <section id="home" class="hero section">
       <div class="hero-copy">
         <p class="eyebrow">{{ $content['role'] }}</p>
         <h1>{{ $content['hero_title'] }}</h1>
         <p class="hero-summary">{{ $content['summary'] }}</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#projects"><i class="fas fa-laptop-code"></i> View Work</a>
-          <a class="btn btn-secondary" href="{{ asset($content['resume_pdf']) }}" target="_blank" rel="noopener"><i class="fas fa-file-download"></i> Resume</a>
+          <a class="btn btn-primary" href="#projects"><x-icon name="laptop" /> View Work</a>
+          <a class="btn btn-secondary" href="{{ asset($content['resume_pdf']) }}" target="_blank" rel="noopener"><x-icon name="download" /> Resume</a>
         </div>
         <div class="popularity-badge" aria-label="Portfolio popularity">
-          <i class="fas fa-chart-line"></i>
+          <x-icon name="trending" />
           <span>{{ number_format($views) }} portfolio views</span>
         </div>
       </div>
@@ -128,7 +132,7 @@
       <div class="skills-grid">
         @foreach ($content['skills'] as $skill)
           <article class="info-card">
-            <i class="fas {{ $skill['icon'] ?: 'fa-code' }}"></i>
+            <span class="icon-chip"><x-icon :name="$skill['icon'] ?: 'code'" /></span>
             <h3>{{ $skill['title'] }}</h3>
             <p>{{ $skill['text'] }}</p>
           </article>
@@ -173,7 +177,7 @@
         </div>
         <div class="project-points">
           @foreach ($content['project_points'] as $point)
-            <span><i class="fas fa-check"></i> {{ $point }}</span>
+            <span><x-icon name="check" /> {{ $point }}</span>
           @endforeach
         </div>
       </div>
@@ -217,7 +221,7 @@
           </button>
         @endforeach
         <article class="certificate-note">
-          <i class="fas fa-award"></i>
+          <span class="icon-chip"><x-icon name="award" /></span>
           <h3>More Resume Certifications</h3>
           <p>{{ $content['certification_summary'] }}</p>
         </article>
@@ -256,7 +260,7 @@
         @endforeach
       </div>
       <a href="{{ asset($content['resume_pdf']) }}" class="btn btn-primary" target="_blank" rel="noopener">
-        <i class="fas fa-file-pdf"></i> Open Resume PDF
+        <x-icon name="pdf" /> Open Resume PDF
       </a>
     </section>
 
@@ -293,7 +297,7 @@
         @if ($errors->any())
           <div class="form-error">{{ $errors->first() }}</div>
         @endif
-        <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane"></i> Send Message</button>
+        <button class="btn btn-primary" type="submit"><x-icon name="send" /> Send Message</button>
       </form>
     </section>
   </main>
@@ -311,10 +315,10 @@
       <p>{{ $content['location'] }} | {{ $content['relocation'] }}</p>
     </div>
     <div class="footer-links">
-      <a href="mailto:{{ $content['email'] }}"><i class="fas fa-envelope"></i> Email</a>
-      <a href="tel:{{ preg_replace('/\s+/', '', $content['phone']) }}"><i class="fas fa-phone-alt"></i> {{ $content['phone'] }}</a>
-      <a href="{{ $content['github'] }}" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
-      <a href="{{ $content['linkedin'] }}" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
+      <a href="mailto:{{ $content['email'] }}"><x-icon name="envelope" /> Email</a>
+      <a href="tel:{{ preg_replace('/\s+/', '', $content['phone']) }}"><x-icon name="phone" /> {{ $content['phone'] }}</a>
+      <a href="{{ $content['github'] }}" target="_blank" rel="noopener"><x-icon name="github" /> GitHub</a>
+      <a href="{{ $content['linkedin'] }}" target="_blank" rel="noopener"><x-icon name="linkedin" /> LinkedIn</a>
     </div>
   </footer>
 

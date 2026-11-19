@@ -1,3 +1,54 @@
+/* ── Self-hosted OFL fonts (Phase 3) — files in assets/fonts/, see ASSET_CREDITS.md ── */
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/fonts/fraunces-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/fonts/fraunces-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/fonts/inter-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/fonts/inter-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/fonts/inter-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/fonts/inter-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("assets/fonts/inter-latin-800-normal.woff2") format("woff2");
+}
+
 :root {
   /* ── Nature palette (Phase 1 design system) ───────────────── */
   --forest: #142b23; /* Forest Green — page background */
@@ -25,9 +76,9 @@
   --overlay-mid: rgba(32, 60, 48, 0.74);
   --overlay-glow: rgba(197, 166, 106, 0.16);
 
-  /* ── Type stacks (self-hosted display font lands here, Phase 3) ─ */
-  --font-sans: Arial, Helvetica, sans-serif;
-  --font-display: Arial, Helvetica, sans-serif;
+  /* ── Type stacks (self-hosted OFL fonts, Phase 3) ──────────── */
+  --font-sans: "Inter", Arial, Helvetica, sans-serif;
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
 }
 
 * {
@@ -149,6 +200,63 @@ img {
   max-width: 100%;
 }
 
+/* ── Inline SVG icon set (Phase 3 — replaces Font Awesome CDN) ── */
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  vertical-align: -0.125em;
+}
+
+.icon-chip {
+  display: inline-grid;
+  place-items: center;
+  border-radius: 7px;
+  color: var(--accent-dark);
+  background: var(--accent-soft);
+}
+
+/* ── Skip link (accessibility, Phase 3) ── */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  z-index: 250;
+  padding: 12px 22px;
+  border-radius: 8px;
+  background: var(--cream);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  transform: translate(-50%, -220%);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+  transform: translate(-50%, 0);
+}
+
+/* ── Scroll progress bar (Phase 3) ── */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 150;
+  height: 3px;
+  pointer-events: none;
+}
+
+.scroll-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--earth), var(--gold));
+  box-shadow: 0 0 10px rgba(197, 166, 106, 0.55);
+}
+
 .cursor-dot,
 .cursor-ring {
   position: fixed;
@@ -210,6 +318,14 @@ img {
   background: rgba(243, 240, 229, 0.9);
   box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
+  transition: top 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Condensed state once the page is scrolled (toggled by script.js) */
+.site-header.is-scrolled {
+  top: 8px;
+  background: rgba(243, 240, 229, 0.96);
+  box-shadow: 0 16px 38px rgba(4, 12, 9, 0.3);
 }
 
 .brand {
@@ -328,6 +444,9 @@ img {
 h1,
 h2,
 h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
   line-height: 1.12;
 }
 
@@ -662,7 +781,7 @@ h3 {
   transform: translateX(100%);
 }
 
-.info-card i {
+.info-card .icon-chip {
   display: inline-grid;
   width: 42px;
   height: 42px;
@@ -674,7 +793,12 @@ h3 {
   transition: transform 0.25s ease, background 0.25s ease;
 }
 
-.info-card:hover i {
+.info-card .icon-chip .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.info-card:hover .icon-chip {
   background: #d7e2d1;
   transform: rotate(-6deg) scale(1.08);
 }
@@ -839,7 +963,9 @@ h3 {
   font-weight: 800;
 }
 
-.project-points i {
+.project-points .icon {
+  width: 16px;
+  height: 16px;
   color: var(--accent-dark);
 }
 
@@ -909,7 +1035,7 @@ h3 {
   grid-column: 1 / -1;
 }
 
-.certificate-note i {
+.certificate-note .icon-chip {
   display: inline-grid;
   width: 42px;
   height: 42px;
@@ -918,6 +1044,11 @@ h3 {
   border-radius: 7px;
   color: var(--accent-dark);
   background: var(--accent-soft);
+}
+
+.certificate-note .icon-chip .icon {
+  width: 20px;
+  height: 20px;
 }
 
 .details-grid {
