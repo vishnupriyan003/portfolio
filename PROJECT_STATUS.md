@@ -4,7 +4,7 @@
 **Stack:** Laravel 9.52.23 · PHP 8.0.30 (XAMPP) · MySQL · Vanilla CSS/JS (Blade single page)
 **Live site:** https://vishnupriyanweb.free.nf/ (InfinityFree)
 **Started:** 2026-11-19
-**Last updated:** Phase 5 complete (cinematic hero + content sections)
+**Last updated:** Phase 6 complete (animations)
 
 ---
 
@@ -18,7 +18,7 @@
 | **3** | UI foundation: header/nav rebuild, scroll progress, skip link, inline SVG icons (drop Font Awesome CDN), self-hosted fonts | ✅ **Complete** | Report below |
 | **4** | Cinematic hero: full-screen muted looping video + poster + fallback, rotating designation, Hire Me / Download Resume, scroll cue | ✅ **Complete** | Report below |
 | **5** | Content sections: About, Skills, Experience, Projects, Education/Certs, Achievements (omitted for now), Contact, Footer — resume-backed only; **removes DEV QUEST game panel** | ✅ **Complete** | Report below |
-| **6** | Animations: CSS + IntersectionObserver reveals/hovers first; vendored GSAP/ScrollTrigger/Lenis **only if needed**; `prefers-reduced-motion` respected | ⬜ Not started | |
+| **6** | Animations: CSS + IntersectionObserver reveals/hovers first; vendored GSAP/ScrollTrigger/Lenis **only if needed**; `prefers-reduced-motion` respected | ✅ **Complete** | Report below |
 | **7** | Responsive: 360 / 390 / 768 / 1366 / 1920 px, mobile video alternative | ⬜ Not started | |
 | **8** | Performance / accessibility / SEO: lazy loading, sitemap.xml, cursor fix, debug flag, `.env` guidance | ⬜ Not started | |
 | **9** | Testing checklist + InfinityFree deployment + live verification | ⬜ Not started | |
@@ -156,6 +156,20 @@
 
 ---
 
+## Phase 6 Report (Complete)
+
+**Decision: no GSAP/Lenis needed** — the existing CSS + IntersectionObserver system already covers every requirement, so nothing was vendored (locked Phase 0 decision honored: library only if needed). **Files changed:** `style.css` only.
+
+1. **Hero entrance stagger** — `.hero-copy`'s single fadeUp replaced with per-child sequence (eyebrow → h1 → summary → CTAs → badge at 0.10/0.22/0.34/0.46/0.58 s) for a cinematic build-in.
+2. **List staggers extended** — `transition-delay` added for `.timeline-item` (2–3), `.project-list article` (2–3), `.details-grid article` (2–3), matching the existing skills/certificate/education staggers.
+3. **Hover polish** — lift + deep shadow on `.project-list article` and `.details-grid article` (previously static).
+4. **Already in place, verified untouched:** reveal-on-scroll (IntersectionObserver, unobserve after reveal), smooth anchor scrolling, button/card/timeline/tag/footer hovers, lightbox fade+zoom, preloader, `is-scrolled` header, scroll-cue pulse, particles, designation rotator.
+5. **Reduced motion:** the global `prefers-reduced-motion` block (0.01 ms durations, `scroll-behavior: auto`, `.reveal` forced visible) covers all of the above; JS already gates cursor/rotator/particles/video on the same query.
+
+**Acceptance checks:** CSS braces 270/270 · `node --check` OK · page HTTP 200 · all new selectors present in output · reduced-motion block present.
+
+---
+
 ## Log
 
 - **Phase 0** — Read-only audit completed and approved.
@@ -164,3 +178,4 @@
 - **Phase 3** — ✅ Complete. Font Awesome CDN removed → 15-icon inline SVG component (DB `fa-*` names mapped); Fraunces + Inter self-hosted (OFL, preloaded); skip link + `#main` target; rAF scroll-progress bar; condensed header state; `aria-current` nav. Commit: `phase-3-ui-foundation`.
 - **Phase 4** — ✅ Complete. Hero video/poster/still fallback wired (bg.mp4 404 gone); content-derived rotating designation; Hire Me + Download Resume CTAs; scroll cue; ambient particles; reduced-motion video guard.
 - **Phase 5** — ✅ Complete. DEV QUEST game panel removed; resume-verified About section added; experience 4-field parse bug fixed (company line, no pipe leaks); resume cross-check flags recorded. Commit: `phase-4-5-hero-content`.
+- **Phase 6** — ✅ Complete. No GSAP/Lenis (CSS+IO sufficient); hero entrance stagger, list staggers, hover lifts. Commit: `phase-6-animations`.
