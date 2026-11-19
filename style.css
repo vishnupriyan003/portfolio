@@ -417,6 +417,7 @@ img {
   position: relative;
   display: grid;
   min-height: 100vh;
+  min-height: 100dvh; /* mobile URL-bar-safe (Phase 7) */
   grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
   gap: 44px;
   align-items: center;
@@ -1590,15 +1591,9 @@ h3 {
   }
 }
 
-@media (max-width: 760px) {
-  html {
-    scroll-padding-top: 86px;
-  }
-
-  .site-header {
-    top: 12px;
-  }
-
+@media (max-width: 880px) {
+  /* Nav collapses to hamburger earlier than the layout does:
+     6 desktop links + brand overflow the header at 768px. */
   .menu-toggle {
     display: block;
   }
@@ -1622,9 +1617,25 @@ h3 {
   .primary-nav a {
     justify-content: center;
   }
+}
+
+@media (max-width: 760px) {
+  html {
+    scroll-padding-top: 86px;
+  }
+
+  .site-header {
+    top: 12px;
+  }
 
   .hero {
     padding-top: 124px;
+  }
+
+  /* Mobile video alternative (Phase 7): skip the background video
+     entirely on small screens — the poster still layer shows instead. */
+  #myVideo {
+    display: none;
   }
 
   .section {

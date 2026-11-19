@@ -257,8 +257,21 @@ if (particleHost && !prefersReducedMotion.matches) {
 
 // Reduced motion: stop the hero video (the static poster still shows)
 const heroVideo = document.getElementById("myVideo");
+
+// Mobile (Phase 7): abort the video download entirely — CSS hides it and
+// the poster still layer serves as the background instead.
+const skipVideoForViewport = heroVideo !== null
+  && window.matchMedia("(max-width: 760px)").matches;
+
+if (skipVideoForViewport) {
+  heroVideo.pause();
+  heroVideo.removeAttribute("autoplay");
+  heroVideo.querySelectorAll("source").forEach((source) => source.remove());
+  heroVideo.load(); // cancels any in-flight request
+}
+
 function applyMotionPreference(event) {
-  if (!heroVideo) return;
+  if (!heroVideo || skipVideoForViewport) return;
 
   if (event.matches) {
     heroVideo.pause();

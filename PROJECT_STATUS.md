@@ -4,7 +4,7 @@
 **Stack:** Laravel 9.52.23 · PHP 8.0.30 (XAMPP) · MySQL · Vanilla CSS/JS (Blade single page)
 **Live site:** https://vishnupriyanweb.free.nf/ (InfinityFree)
 **Started:** 2026-11-19
-**Last updated:** Phase 6 complete (animations)
+**Last updated:** Phase 7 complete (responsive)
 
 ---
 
@@ -19,7 +19,7 @@
 | **4** | Cinematic hero: full-screen muted looping video + poster + fallback, rotating designation, Hire Me / Download Resume, scroll cue | ✅ **Complete** | Report below |
 | **5** | Content sections: About, Skills, Experience, Projects, Education/Certs, Achievements (omitted for now), Contact, Footer — resume-backed only; **removes DEV QUEST game panel** | ✅ **Complete** | Report below |
 | **6** | Animations: CSS + IntersectionObserver reveals/hovers first; vendored GSAP/ScrollTrigger/Lenis **only if needed**; `prefers-reduced-motion` respected | ✅ **Complete** | Report below |
-| **7** | Responsive: 360 / 390 / 768 / 1366 / 1920 px, mobile video alternative | ⬜ Not started | |
+| **7** | Responsive: 360 / 390 / 768 / 1366 / 1920 px, mobile video alternative | ✅ **Complete** | Report below |
 | **8** | Performance / accessibility / SEO: lazy loading, sitemap.xml, cursor fix, debug flag, `.env` guidance | ⬜ Not started | |
 | **9** | Testing checklist + InfinityFree deployment + live verification | ⬜ Not started | |
 
@@ -170,6 +170,23 @@
 
 ---
 
+## Phase 7 Report (Complete)
+
+**Files changed:** `style.css`, `script.js`.
+
+1. **Nav overflow fix at 768 px** — the 6-link desktop nav + brand ≈ 800 px, wider than the 744 px header at tablet width. The hamburger dropdown block moved to its own `@media (max-width: 880px)` (layout grids keep their 980/760 breakpoints), so tablets get the dropdown while 1366/1920 keep the full bar.
+2. **Mobile video alternative** — at ≤760 px the background video is skipped entirely: CSS `#myVideo { display: none }` + JS aborts any in-flight request (removes `<source>`, `load()`), and a `skipVideoForViewport` flag stops the reduced-motion handler from re-enabling it. The `hero-still` poster layer (Phase 4) becomes the mobile background → **zero video bytes on phones**.
+3. **`100dvh` fallback** — `.hero` now `min-height: 100vh; min-height: 100dvh` so the hero isn't clipped by mobile browser URL bars.
+4. **Breakpoint walkthrough (360/390/768/1366/1920):**
+   - **360/390** — ≤480: h1 36 px, brand ellipsis, hero CTAs + footer links stack full-width, buttons full-width; ≤760: single-column grids, hamburger, 26 px card padding, poster-only hero.
+   - **768** — hamburger (880 rule), 2-col skills/certificate/details grids (980 rule), single-col hero/about (980/760 rules).
+   - **1366/1920** — full desktop: 2-col hero, nav bar, 3-col education, video background plays (width > 760).
+   - All widths: `body { overflow-x: hidden }` guards horizontal scroll; `scroll-padding-top` keeps anchors clear of the fixed header.
+
+**Acceptance checks:** `node --check` OK · CSS braces 272/272 · page HTTP 200 · 6 media queries (980/880/760/480 + reduced-motion + pointer:coarse) · `100dvh`/880/mobile-video/abort-guard all present.
+
+---
+
 ## Log
 
 - **Phase 0** — Read-only audit completed and approved.
@@ -179,3 +196,4 @@
 - **Phase 4** — ✅ Complete. Hero video/poster/still fallback wired (bg.mp4 404 gone); content-derived rotating designation; Hire Me + Download Resume CTAs; scroll cue; ambient particles; reduced-motion video guard.
 - **Phase 5** — ✅ Complete. DEV QUEST game panel removed; resume-verified About section added; experience 4-field parse bug fixed (company line, no pipe leaks); resume cross-check flags recorded. Commit: `phase-4-5-hero-content`.
 - **Phase 6** — ✅ Complete. No GSAP/Lenis (CSS+IO sufficient); hero entrance stagger, list staggers, hover lifts. Commit: `phase-6-animations`.
+- **Phase 7** — ✅ Complete. Nav hamburger breakpoint at 880 (768 overflow fix), mobile video skipped (poster-only, download aborted), `100dvh` hero, breakpoint walkthrough. Commit: `phase-7-responsive`.
