@@ -10,7 +10,7 @@ const preloader = document.getElementById("preloader");
 const cursorDot = document.querySelector(".cursor-dot");
 const cursorRing = document.querySelector(".cursor-ring");
 const animatedItems = document.querySelectorAll(
-  ".content-band, .split-section, .education-section, .certificates-section, .details-section, .resume-section, .contact-form-section, .game-panel, .info-card, .timeline-item, .project-points span, .project-list article, .education-grid article, .certificate-card, .certificate-note, .details-grid article, .resume-preview-images img"
+  ".content-band, .split-section, .education-section, .certificates-section, .details-section, .resume-section, .contact-form-section, .info-card, .timeline-item, .project-points span, .project-list article, .education-grid article, .certificate-card, .certificate-note, .details-grid article, .resume-preview-images img"
 );
 
 document.body.classList.add("is-loaded");
@@ -194,3 +194,82 @@ window.addEventListener(
 );
 
 paintScrollState();
+
+// ── Phase 4: cinematic hero ────────────────────────────────────────
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+);
+
+// Rotating designation — phrases arrive from the server (existing content only)
+const rotator = document.querySelector(".designation-rotator");
+if (rotator && !prefersReducedMotion.matches) {
+  let phrases;
+  try {
+    phrases = JSON.parse(rotator.dataset.designations || "[]");
+  } catch {
+    phrases = [];
+  }
+
+  if (Array.isArray(phrases) && phrases.length > 1) {
+    let phraseIndex = 0;
+    setInterval(() => {
+      rotator.classList.add("is-changing");
+      setTimeout(() => {
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        rotator.textContent = phrases[phraseIndex];
+        rotator.classList.remove("is-changing");
+      }, 300);
+    }, 3400);
+  }
+}
+
+// Scroll cue — hide once the visitor leaves the hero
+const scrollCue = document.querySelector(".scroll-cue");
+if (scrollCue) {
+  window.addEventListener(
+    "scroll",
+    () => {
+      scrollCue.classList.toggle("is-hidden", window.scrollY > 120);
+    },
+    { passive: true }
+  );
+}
+
+// Ambient hero particles — decorative, skipped for reduced motion
+const particleHost = document.querySelector(".hero-particles");
+if (particleHost && !prefersReducedMotion.matches) {
+  const PARTICLE_COUNT = 16;
+  const frag = document.createDocumentFragment();
+
+  for (let i = 0; i < PARTICLE_COUNT; i += 1) {
+    const dot = document.createElement("span");
+    dot.className = "particle" + (i % 2 ? " is-sage" : "");
+    dot.style.left = `${Math.random() * 100}%`;
+    dot.style.setProperty("--drift", `${(Math.random() - 0.5) * 80}px`);
+    dot.style.animationDuration = `${9 + Math.random() * 9}s`;
+    dot.style.animationDelay = `${-Math.random() * 16}s`;
+    dot.style.width = dot.style.height = `${2 + Math.random() * 3}px`;
+    frag.appendChild(dot);
+  }
+
+  particleHost.appendChild(frag);
+}
+
+// Reduced motion: stop the hero video (the static poster still shows)
+const heroVideo = document.getElementById("myVideo");
+function applyMotionPreference(event) {
+  if (!heroVideo) return;
+
+  if (event.matches) {
+    heroVideo.pause();
+    heroVideo.removeAttribute("autoplay");
+  } else {
+    heroVideo.setAttribute("autoplay", "");
+    heroVideo.play().catch(() => {
+      /* autoplay blocked — poster fallback remains visible */
+    });
+  }
+}
+
+applyMotionPreference(prefersReducedMotion);
+prefersReducedMotion.addEventListener("change", applyMotionPreference);

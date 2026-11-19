@@ -55,8 +55,10 @@
   <div class="cursor-dot" aria-hidden="true"></div>
   <div class="cursor-ring" aria-hidden="true"></div>
 
-  <video autoplay muted loop playsinline id="myVideo" preload="metadata" aria-hidden="true">
-    <source src="{{ asset('bg.mp4') }}" type="video/mp4">
+  <img class="hero-still" src="{{ asset('assets/videos/hero-forest-poster.jpg') }}" alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+  <video autoplay muted loop playsinline preload="metadata" id="myVideo"
+         poster="{{ asset('assets/videos/hero-forest-poster.jpg') }}" aria-hidden="true">
+    <source src="{{ asset('assets/videos/hero-forest.mp4') }}" type="video/mp4">
   </video>
   <div class="site-overlay" aria-hidden="true"></div>
 
@@ -72,6 +74,7 @@
 
     <nav class="primary-nav" id="primaryNav" aria-label="Primary navigation">
       <a href="#home" class="nav-link">Home</a>
+      <a href="#about" class="nav-link">About</a>
       <a href="#skills" class="nav-link">Skills</a>
       <a href="#experience" class="nav-link">Experience</a>
       <a href="#projects" class="nav-link">Projects</a>
@@ -80,14 +83,30 @@
   </header>
 
   <main id="main" tabindex="-1">
+    @php
+      // Rotating designation phrases are derived only from existing content:
+      // the role (split on "|") + SEO keywords that name a designation.
+      $designations = collect(preg_split('/\s*\|\s*/', trim($content['role'])))
+          ->merge(collect(explode(',', $content['seo_keywords']))
+              ->map(fn ($k) => trim($k))
+              ->filter(fn ($k) => $k !== '' && stripos($k, 'Developer') !== false && !str_ends_with($k, 'Karur')))
+          ->filter()
+          ->unique()
+          ->values()
+          ->take(5);
+    @endphp
     <section id="home" class="hero section">
+      <div class="hero-particles" aria-hidden="true"></div>
       <div class="hero-copy">
-        <p class="eyebrow">{{ $content['role'] }}</p>
+        <p class="eyebrow">
+          <span class="sr-only">{{ $content['role'] }}</span>
+          <span class="designation-rotator" aria-hidden="true" data-designations='@json($designations)'>{{ $designations[0] ?? $content['role'] }}</span>
+        </p>
         <h1>{{ $content['hero_title'] }}</h1>
         <p class="hero-summary">{{ $content['summary'] }}</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#projects"><x-icon name="laptop" /> View Work</a>
-          <a class="btn btn-secondary" href="{{ asset($content['resume_pdf']) }}" target="_blank" rel="noopener"><x-icon name="download" /> Resume</a>
+          <a class="btn btn-primary" href="#contact-form"><x-icon name="envelope" /> Hire Me</a>
+          <a class="btn btn-secondary" href="{{ asset($content['resume_pdf']) }}" download><x-icon name="download" /> Download Resume</a>
         </div>
         <div class="popularity-badge" aria-label="Portfolio popularity">
           <x-icon name="trending" />
@@ -108,19 +127,35 @@
         </div>
       </aside>
 
-      <aside class="game-panel" aria-label="Developer game stats">
-        <div class="game-panel-header">
-          <span>DEV QUEST</span>
-          <strong>LVL 12</strong>
+      <div class="scroll-cue" aria-hidden="true">
+        <span class="scroll-cue-mouse"><span></span></span>
+        <span class="scroll-cue-label">Scroll</span>
+      </div>
+    </section>
+
+    <section id="about" class="section content-band" aria-labelledby="aboutTitle">
+      <div class="section-heading">
+        <p class="eyebrow">About</p>
+        <h2 id="aboutTitle">{{ $content['about_title'] }}</h2>
+      </div>
+
+      <div class="about-layout">
+        <div class="about-copy">
+          @foreach (preg_split('/\R{2,}/', trim($content['about_text'])) as $paragraph)
+            @if (trim($paragraph) !== '')
+              <p>{{ trim($paragraph) }}</p>
+            @endif
+          @endforeach
         </div>
-        <div class="xp-bar"><span style="width: 78%"></span></div>
-        <div class="game-grid">
-          <span><b>HP</b> Clean UI</span>
-          <span><b>MP</b> PHP Logic</span>
-          <span><b>XP</b> MySQL</span>
-          <span><b>SKILL</b> UX Flow</span>
-        </div>
-      </aside>
+        <dl class="about-facts">
+          @foreach ($content['about_facts'] as $fact)
+            <div>
+              <dt>{{ $fact['label'] }}</dt>
+              <dd>{{ $fact['value'] }}</dd>
+            </div>
+          @endforeach
+        </dl>
+      </div>
     </section>
 
     <section id="skills" class="section content-band">
@@ -153,6 +188,7 @@
             <div class="timeline-content">
               <p class="timeline-meta">{{ $item['meta'] }}</p>
               <h3>{{ $item['title'] }}</h3>
+              <p class="timeline-company">{{ $item['company'] }}</p>
               <p>{{ $item['text'] }}</p>
             </div>
           </article>

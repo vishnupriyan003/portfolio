@@ -46,6 +46,9 @@ class PortfolioController extends Controller
             'role' => 'Karur Frontend Developer | PHP Developer',
             'hero_title' => 'Building responsive web experiences with clean UI and practical backend logic.',
             'summary' => 'I am a Karur based developer with hands-on experience in HTML, CSS, JavaScript, PHP, CodeIgniter, MySQL, React, Tailwind CSS, and Figma. I enjoy turning business requirements into smooth, usable web applications.',
+            'about_title' => 'Front-end developer grounded in HTML, CSS, JavaScript, and PHP.',
+            'about_text' => "Passionate Front-end Developer with a strong foundation in HTML, CSS, JavaScript, and PHP. Skilled in UI/UX design, responsive web development, and dynamic web applications.\n\nBasic understanding of Java and SQL, enabling seamless collaboration with back-end developers. Excited to create visually appealing and high-performance web experiences in a fast-paced environment.",
+            'about_facts' => "Education|B.E. Computer Science and Engineering (2020 - 2024), VSB Engineering College, Karur - Aggregate 79%\nExperience|9 months as Junior PHP Developer, plus a 3 month PHP development internship\nBased in|Karur, Tamil Nadu, India - open to relocating for the right opportunity\nLanguages|English and Tamil",
             'location' => 'Karur, Tamil Nadu, India',
             'email' => 'vishnupriyanrenganathan@gmail.com',
             'phone' => '+91 9629760070',
@@ -54,7 +57,7 @@ class PortfolioController extends Controller
             'relocation' => 'Open to relocating for the right opportunity',
             'stats' => "9 mo|Junior PHP role\n3 mo|CodeIgniter internship\n79%|B.E. CSE",
             'skills' => "Frontend|HTML5, CSS3, JavaScript ES6+, React, Bootstrap, Tailwind CSS, Flexbox, CSS Grid, responsive layout, and accessible UI basics.|fa-code\nBackend|PHP, CodeIgniter v3, CRUD modules, login systems, OTP verification, and server-side data flow.|fa-server\nDatabase|MySQL, SQL queries, DDL, DML, grouping, subqueries, functions, and practical database handling.|fa-database\nWorkflow|Git, GitHub, Figma, API integration, debugging, live website troubleshooting, WordPress familiarity, teamwork, and communication.|fa-tools",
-            'experience' => "9 months|Junior PHP Developer | Knock The Globe Technologies|Built and maintained dynamic websites and web applications, supporting backend integration, MySQL data handling, debugging, performance improvements, and live website support.\nEnded 20-05-2025 | 3 months|PHP Developer Intern | Salesqueen Software Solutions|Developed CodeIgniter v3 modules including CRUD operations, user authentication, OTP generation, and vehicle management features connected with MySQL.",
+            'experience' => "9 months|Junior PHP Developer|Knock The Globe Technologies|Built and maintained dynamic websites and web applications, supporting backend integration, MySQL data handling, debugging, performance improvements, and live website support.\n3 months (ended 20-05-2025)|PHP Developer Intern|Salesqueen Software Solutions|Developed CodeIgniter v3 modules including CRUD operations, user authentication, OTP generation, and vehicle management features connected with MySQL.",
             'project_title' => 'Vehicle Management Web Application',
             'project_description' => 'Developed a data-driven web application for managing customers, vehicles, and payments. The system supports adding, fetching, editing, payment calculations, and vehicle status tracking based on payment progress.',
             'project_tags' => 'HTML, CSS, JavaScript, PHP, MySQL',
@@ -83,8 +86,9 @@ class PortfolioController extends Controller
         }
 
         $content['stats'] = $this->parseLines($content['stats'], ['value', 'label']);
+        $content['about_facts'] = $this->parseLines($content['about_facts'], ['label', 'value']);
         $content['skills'] = $this->parseLines($content['skills'], ['title', 'text', 'icon']);
-        $content['experience'] = $this->parseLines($content['experience'], ['meta', 'title', 'text']);
+        $content['experience'] = $this->parseLines($content['experience'], ['meta', 'title', 'company', 'text']);
         $content['education'] = $this->parseLines($content['education'], ['year', 'title', 'text']);
         $content['project_tags'] = $this->parseCommaList($content['project_tags']);
         $content['project_points'] = $this->parseSimpleLines($content['project_points']);
