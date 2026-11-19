@@ -1,0 +1,20 @@
+# Dependencies
+main/vendor/
+main/node_modules/
+
+# Environment / secrets
+main/.env
+
+# Laravel runtime files
+main/storage/framework/cache/*
+main/storage/framework/sessions/*
+main/storage/framework/testing/*
+main/storage/framework/views/*
+main/storage/logs/*
+main/bootstrap/cache/*.php
+main/bootstrap/cache/.gitignore
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.log
