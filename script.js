@@ -13,6 +13,11 @@ const animatedItems = document.querySelectorAll(
   ".content-band, .split-section, .education-section, .certificates-section, .details-section, .resume-section, .contact-form-section, .info-card, .timeline-item, .project-points span, .project-list article, .education-grid article, .certificate-card, .certificate-note, .details-grid article, .resume-preview-images img"
 );
 
+// Initialize Multi-Design Theme Engine
+if (typeof ThemeManager !== "undefined") {
+  ThemeManager.init();
+}
+
 document.body.classList.add("is-loaded");
 
 function hidePreloader() {
@@ -30,6 +35,7 @@ const canAnimateCursor = window.matchMedia("(pointer: fine)").matches
   && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 if (canAnimateCursor && cursorDot && cursorRing) {
+  document.body.classList.add("has-custom-cursor");
   let ringX = 0;
   let ringY = 0;
   let dotX = 0;
@@ -59,7 +65,7 @@ if (canAnimateCursor && cursorDot && cursorRing) {
     }
   });
 
-  document.querySelectorAll("a, button, input, textarea, .certificate-card").forEach((item) => {
+  document.querySelectorAll("a, button, input, textarea, .certificate-card, .theme-preview-card, .theme-settings-btn, .theme-drawer-close, .theme-mode-btn, .theme-reset-btn").forEach((item) => {
     item.addEventListener("mouseenter", () => cursorRing.classList.add("is-active"));
     item.addEventListener("mouseleave", () => cursorRing.classList.remove("is-active"));
   });
@@ -272,6 +278,12 @@ if (skipVideoForViewport) {
 
 function applyMotionPreference(event) {
   if (!heroVideo || skipVideoForViewport) return;
+
+  const currentTheme = typeof ThemeManager !== "undefined" ? ThemeManager.getCurrentTheme() : "nature";
+  if (currentTheme !== "nature") {
+    heroVideo.pause();
+    return;
+  }
 
   if (event.matches) {
     heroVideo.pause();

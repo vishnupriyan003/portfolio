@@ -23,6 +23,18 @@
   <title>{{ $content['seo_title'] }}</title>
   <link rel="preload" href="{{ asset('assets/fonts/fraunces-latin-600-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ asset('assets/fonts/inter-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("vp_portfolio_theme") || "nature";
+        var m = localStorage.getItem("vp_portfolio_theme_mode") || "default";
+        document.documentElement.setAttribute("data-theme", t);
+        if (m && m !== "default") {
+          document.documentElement.setAttribute("data-theme-mode", m);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link rel="stylesheet" href="{{ asset('style.css') }}">
   @php
     $schema = [
@@ -253,7 +265,7 @@
       <div class="certificate-grid">
         @foreach ($content['certificates'] as $certificate)
           <button type="button" class="certificate-card" data-full="{{ asset($certificate['image']) }}" data-title="{{ $certificate['title'] }} Certificate">
-            <img src="{{ asset($certificate['image']) }}" alt="{{ $certificate['title'] }} certificate"><span>{{ $certificate['title'] }}</span>
+            <img src="{{ asset($certificate['image']) }}" alt="{{ $certificate['title'] }} certificate" loading="lazy" decoding="async"><span>{{ $certificate['title'] }}</span>
           </button>
         @endforeach
         <article class="certificate-note">
@@ -292,7 +304,7 @@
       </div>
       <div class="resume-preview-images">
         @foreach ($content['resume_previews'] as $index => $preview)
-          <img src="{{ asset($preview) }}" alt="Resume page {{ $index + 1 }} preview">
+          <img src="{{ asset($preview) }}" alt="Resume page {{ $index + 1 }} preview" loading="lazy" decoding="async">
         @endforeach
       </div>
       <a href="{{ asset($content['resume_pdf']) }}" class="btn btn-primary" target="_blank" rel="noopener">
@@ -358,6 +370,64 @@
     </div>
   </footer>
 
+  <!-- Floating Theme Customization Trigger Button -->
+  <button class="theme-settings-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="themeCustomizationDrawer" aria-label="Customize Design">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </svg>
+    <span class="theme-settings-tooltip">Customize Design</span>
+  </button>
+
+  <!-- Theme Customization Drawer Backdrop -->
+  <div class="theme-drawer-backdrop" id="themeDrawerBackdrop" aria-hidden="true"></div>
+
+  <!-- Theme Customization Slide-Over Drawer -->
+  <aside class="theme-drawer" id="themeCustomizationDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="themeDrawerTitle">
+    <div class="theme-drawer-header">
+      <div class="theme-drawer-title-wrap">
+        <h2 id="themeDrawerTitle">Customize Your Experience</h2>
+        <span class="theme-drawer-subtitle">7 Live Visual Design Systems</span>
+      </div>
+      <button class="theme-drawer-close" type="button" aria-label="Close customization panel">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="theme-drawer-body">
+      <!-- Optional Variant Mode Toggle (for themes that support Light/Dark) -->
+      <section class="theme-variant-section is-hidden" id="themeVariantSection" aria-label="Theme mode variants">
+        <span class="theme-variant-label">Color Variant</span>
+        <div class="theme-mode-buttons">
+          <button class="theme-mode-btn is-active" type="button" data-mode-btn="default" aria-pressed="true">Default</button>
+          <button class="theme-mode-btn" type="button" data-mode-btn="light" aria-pressed="false">Light</button>
+          <button class="theme-mode-btn" type="button" data-mode-btn="dark" aria-pressed="false">Dark</button>
+        </div>
+      </section>
+
+      <!-- Theme Cards List -->
+      <div class="theme-cards-list" id="themeCardsContainer" role="radiogroup" aria-label="Available themes">
+        <!-- Injected dynamically by ThemeManager -->
+      </div>
+    </div>
+
+    <div class="theme-drawer-footer">
+      <button class="theme-reset-btn" id="themeResetBtn" type="button">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+          <path d="M3 3v5h5"></path>
+        </svg>
+        Reset to Default (Nature)
+      </button>
+    </div>
+  </aside>
+
+  <script src="{{ asset('theme-engine/theme-config.js') }}"></script>
+  <script src="{{ asset('theme-engine/theme-storage.js') }}"></script>
+  <script src="{{ asset('theme-engine/theme-manager.js') }}"></script>
   <script src="{{ asset('script.js') }}"></script>
 </body>
 </html>

@@ -1,0 +1,187 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   THEME 7: MATERIAL DESIGN (MATERIAL 3)
+   Layered surface elevations (dp levels), consistent tonal hierarchy,
+   rounded pill components, responsive interaction states, light and dark modes.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root[data-theme="material"] {
+  --theme-name: "material";
+  --bg: #fdfbff;
+  --bg-secondary: #f3f0f7;
+  --panel: #ffffff;
+  --panel-strong: #ffffff;
+  --panel-tonal: #ece6f0;
+  --ink: #1d1b20;
+  --ink-on-dark: #fdfbff;
+  --muted: #49454f;
+  --muted-on-dark: #c4c7c5;
+  --line: #cac4d0;
+  --accent: #6750a4;
+  --accent-dark: #4f378b;
+  --accent-soft: #eaddff;
+  --highlight: #7d5260;
+  
+  /* Material Elevation Tokens */
+  --elevation-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+  --elevation-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+  --elevation-3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+  --elevation-4: 0px 6px 10px 4px rgba(0, 0, 0, 0.15), 0px 2px 3px 0px rgba(0, 0, 0, 0.3);
+  
+  --card-radius: 16px;
+  --btn-radius: 24px;
+  --font-sans: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Material Dark Mode Variant */
+:root[data-theme="material"][data-theme-mode="dark"] {
+  --bg: #141218;
+  --bg-secondary: #1d1b20;
+  --panel: #211f26;
+  --panel-strong: #2b2930;
+  --panel-tonal: #36343b;
+  --ink: #e6e0e9;
+  --ink-on-dark: #e6e0e9;
+  --muted: #cac4d0;
+  --muted-on-dark: #e6e0e9;
+  --line: #49454f;
+  --accent: #d0bcff;
+  --accent-dark: #b69df8;
+  --accent-soft: #4f378b;
+  --highlight: #efb8c8;
+  --elevation-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.4), 0px 1px 2px 0px rgba(0, 0, 0, 0.6);
+  --elevation-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.4), 0px 1px 2px 0px rgba(0, 0, 0, 0.6);
+  --elevation-3: 0px 4px 8px 3px rgba(0, 0, 0, 0.4), 0px 1px 3px 0px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="material"] body {
+  background-color: var(--bg);
+  background-image: none !important;
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/* Hide Nature Cinematic video & poster */
+[data-theme="material"] #myVideo,
+[data-theme="material"] .hero-still,
+[data-theme="material"] .hero-particles,
+[data-theme="material"] .site-overlay {
+  display: none !important;
+}
+
+/* Header & Nav */
+[data-theme="material"] .site-header {
+  background: var(--panel) !important;
+  box-shadow: var(--elevation-2) !important;
+  border-bottom: 1px solid var(--line) !important;
+}
+
+[data-theme="material"] .brand span,
+[data-theme="material"] .nav-link {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+[data-theme="material"] .nav-link:hover,
+[data-theme="material"] .nav-link.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: var(--btn-radius);
+}
+
+/* Hero Section */
+[data-theme="material"] .hero {
+  background: var(--bg-secondary) !important;
+}
+
+[data-theme="material"] .hero-title {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+[data-theme="material"] .hero-subtitle {
+  color: var(--muted);
+}
+
+/* Material Cards: Elevated surfaces */
+[data-theme="material"] .info-card,
+[data-theme="material"] .project-card,
+[data-theme="material"] .education-card,
+[data-theme="material"] .certificate-card,
+[data-theme="material"] .resume-card,
+[data-theme="material"] .skill-category,
+[data-theme="material"] .content-band,
+[data-theme="material"] .contact-form-section {
+  background: var(--panel) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--card-radius);
+  box-shadow: var(--elevation-1) !important;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+[data-theme="material"] .project-card:hover,
+[data-theme="material"] .certificate-card:hover {
+  box-shadow: var(--elevation-3) !important;
+  transform: translateY(-3px);
+}
+
+/* Material Filled & Tonal Buttons */
+[data-theme="material"] .btn-primary {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: var(--btn-radius);
+  box-shadow: var(--elevation-1) !important;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+[data-theme="material"] .btn-primary:hover {
+  box-shadow: var(--elevation-2) !important;
+  transform: translateY(-1px);
+}
+
+[data-theme="material"] .btn-secondary {
+  background: transparent !important;
+  color: var(--accent) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--btn-radius);
+  font-weight: 600;
+}
+
+[data-theme="material"] .btn-secondary:hover {
+  background: var(--accent-soft) !important;
+}
+
+/* Form inputs: Outlined Material Style */
+[data-theme="material"] input,
+[data-theme="material"] textarea {
+  background: var(--panel) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 8px !important;
+  color: var(--ink) !important;
+  transition: border-color 0.2s ease;
+}
+
+[data-theme="material"] input:focus,
+[data-theme="material"] textarea:focus {
+  border: 2px solid var(--accent) !important;
+  outline: none;
+}
+
+/* Skill Chips: Assist / Filter Chips */
+[data-theme="material"] .skill-chip {
+  background: var(--panel-tonal) !important;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Footer */
+[data-theme="material"] .site-footer {
+  background: var(--bg-secondary) !important;
+  border-top: 1px solid var(--line) !important;
+  color: var(--ink) !important;
+}

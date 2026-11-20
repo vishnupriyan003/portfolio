@@ -18,3 +18,5 @@ main/bootstrap/cache/.gitignore
 .DS_Store
 Thumbs.db
 *.log
+*.xlsx
+

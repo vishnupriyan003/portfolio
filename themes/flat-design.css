@@ -1,0 +1,210 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   THEME 2: FLAT DESIGN
+   Zero shadows, zero gradients, crisp solid surfaces, sharp geometric borders,
+   clean neo-grotesque typography, high-contrast visual hierarchy.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root[data-theme="flat"] {
+  --theme-name: "flat";
+  --bg: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --panel: #ffffff;
+  --panel-strong: #ffffff;
+  --panel-dark: #0f172a;
+  --ink: #0f172a;
+  --ink-on-dark: #f8fafc;
+  --muted: #64748b;
+  --muted-on-dark: #94a3b8;
+  --line: #e2e8f0;
+  --line-strong: #0f172a;
+  --accent: #2563eb;
+  --accent-dark: #1d4ed8;
+  --accent-soft: #eff6ff;
+  --highlight: #f97316;
+  --white: #ffffff;
+  --shadow: none;
+  --card-radius: 4px;
+  --btn-radius: 4px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Dark Mode Variant */
+:root[data-theme="flat"][data-theme-mode="dark"] {
+  --bg: #0f172a;
+  --bg-secondary: #1e293b;
+  --panel: #1e293b;
+  --panel-strong: #334155;
+  --panel-dark: #020617;
+  --ink: #f8fafc;
+  --ink-on-dark: #f8fafc;
+  --muted: #94a3b8;
+  --muted-on-dark: #cbd5e1;
+  --line: #334155;
+  --line-strong: #64748b;
+  --accent: #3b82f6;
+  --accent-dark: #2563eb;
+  --accent-soft: #1e3a8a;
+  --highlight: #fb923c;
+}
+
+/* Global Reset for Flat: Abolish shadows & gradients */
+[data-theme="flat"] * {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+[data-theme="flat"] body {
+  background-color: var(--bg);
+  background-image: none !important;
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/* Hide Nature Cinematic video & poster */
+[data-theme="flat"] #myVideo,
+[data-theme="flat"] .hero-still,
+[data-theme="flat"] .hero-particles,
+[data-theme="flat"] .site-overlay {
+  display: none !important;
+}
+
+/* Header & Nav */
+[data-theme="flat"] .site-header {
+  background: var(--panel) !important;
+  border-bottom: 2px solid var(--line);
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+[data-theme="flat"] .brand span,
+[data-theme="flat"] .nav-link {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+[data-theme="flat"] .nav-link:hover,
+[data-theme="flat"] .nav-link.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: var(--btn-radius);
+}
+
+/* Hero Section */
+[data-theme="flat"] .hero {
+  background-color: var(--bg-secondary);
+  border-bottom: 2px solid var(--line);
+  min-height: 85vh;
+}
+
+[data-theme="flat"] .hero-title {
+  color: var(--ink);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+[data-theme="flat"] .hero-subtitle {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* Section Headings */
+[data-theme="flat"] .section-heading h2 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+[data-theme="flat"] .eyebrow {
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* Flat Cards & Surfaces */
+[data-theme="flat"] .info-card,
+[data-theme="flat"] .project-card,
+[data-theme="flat"] .education-card,
+[data-theme="flat"] .certificate-card,
+[data-theme="flat"] .resume-card,
+[data-theme="flat"] .skill-category,
+[data-theme="flat"] .content-band,
+[data-theme="flat"] .contact-form-section {
+  background: var(--panel) !important;
+  border: 2px solid var(--line);
+  border-radius: var(--card-radius);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+[data-theme="flat"] .project-card:hover,
+[data-theme="flat"] .certificate-card:hover {
+  border-color: var(--accent);
+  transform: none !important;
+}
+
+/* Flat Buttons */
+[data-theme="flat"] .btn-primary {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  border-radius: var(--btn-radius);
+  border: 2px solid var(--accent) !important;
+  font-weight: 700;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+[data-theme="flat"] .btn-primary:hover {
+  background: var(--accent-dark) !important;
+  border-color: var(--accent-dark) !important;
+  transform: none !important;
+}
+
+[data-theme="flat"] .btn-secondary {
+  background: transparent !important;
+  color: var(--ink) !important;
+  border: 2px solid var(--line-strong) !important;
+  border-radius: var(--btn-radius);
+  font-weight: 700;
+}
+
+[data-theme="flat"] .btn-secondary:hover {
+  background: var(--line) !important;
+  transform: none !important;
+}
+
+/* Form inputs */
+[data-theme="flat"] input,
+[data-theme="flat"] textarea {
+  background: var(--panel) !important;
+  border: 2px solid var(--line) !important;
+  border-radius: var(--btn-radius);
+  color: var(--ink) !important;
+}
+
+[data-theme="flat"] input:focus,
+[data-theme="flat"] textarea:focus {
+  border-color: var(--accent) !important;
+  outline: none;
+}
+
+/* Skill Chips */
+[data-theme="flat"] .skill-chip {
+  background: var(--accent-soft) !important;
+  color: var(--accent) !important;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+/* Timeline */
+[data-theme="flat"] .timeline-dot {
+  background: var(--accent) !important;
+  border: 3px solid var(--bg) !important;
+}
+
+/* Footer */
+[data-theme="flat"] .site-footer {
+  background: var(--bg-secondary) !important;
+  color: var(--ink) !important;
+  border-top: 2px solid var(--line);
+}
