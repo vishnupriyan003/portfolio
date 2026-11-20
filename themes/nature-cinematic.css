@@ -65,7 +65,9 @@
 [data-theme="nature"] .hero,
 :root:not([data-theme]) .hero {
   position: relative;
-  min-height: 100vh;
+  /* Matches the base rule: the static header now occupies flow space
+     above the hero, so 100vh would push the hero past the fold. */
+  min-height: calc(100vh - 96px);
 }
 
 [data-theme="nature"] .hero-title,

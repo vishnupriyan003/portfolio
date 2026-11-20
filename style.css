@@ -98,7 +98,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 96px;
+  scroll-padding-top: 16px;
 }
 
 body {
@@ -122,10 +122,6 @@ body.has-custom-cursor textarea {
 
 body.is-loaded .site-header {
   animation: headerDrop 0.7s ease both;
-}
-
-body.menu-open {
-  overflow: hidden;
 }
 
 .preloader {
@@ -312,31 +308,27 @@ img {
   animation: trailFade 0.55s ease forwards;
 }
 
+/* Static top navigation bar (redesign): sits in normal flow at the top of
+   the page and scrolls away with the content — same container width as the
+   section cards so everything aligns. */
 .site-header {
-  position: fixed;
-  top: 18px;
-  left: 50%;
+  position: static;
   z-index: 20;
   display: flex;
   width: min(1120px, calc(100% - 32px));
   min-height: 64px;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
+  margin: 18px auto 0;
   padding: 10px 12px 10px 18px;
-  transform: translateX(-50%);
   border: 1px solid rgba(243, 240, 229, 0.3);
   border-radius: 8px;
   background: rgba(243, 240, 229, 0.9);
   box-shadow: var(--shadow);
   backdrop-filter: blur(16px);
-  transition: top 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Condensed state once the page is scrolled (toggled by script.js) */
-.site-header.is-scrolled {
-  top: 8px;
-  background: rgba(243, 240, 229, 0.96);
-  box-shadow: 0 16px 38px rgba(4, 12, 9, 0.3);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .brand {
@@ -387,52 +379,20 @@ img {
   transform: translateY(-1px);
 }
 
-.menu-toggle {
-  display: none;
-  width: 44px;
-  height: 44px;
-  border: 0;
-  border-radius: 6px;
-  background: var(--accent);
-  cursor: pointer;
-}
-
-.menu-toggle span {
-  display: block;
-  width: 20px;
-  height: 2px;
-  margin: 5px auto;
-  background: var(--white);
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.menu-toggle[aria-expanded="true"] span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-
-.menu-toggle[aria-expanded="true"] span:nth-child(2) {
-  opacity: 0;
-}
-
-.menu-toggle[aria-expanded="true"] span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
-}
-
 .section {
   width: min(1120px, calc(100% - 32px));
-  margin: 0 auto;
-  padding: 76px 0;
+  margin: 0 auto 36px;
 }
 
 .hero {
   position: relative;
   display: grid;
-  min-height: 100vh;
-  min-height: 100dvh; /* mobile URL-bar-safe (Phase 7) */
+  min-height: calc(100vh - 96px);
+  min-height: calc(100dvh - 96px); /* mobile URL-bar-safe (Phase 7) */
   grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
   gap: 44px;
   align-items: center;
-  padding-top: 136px;
+  padding-top: 48px;
   padding-bottom: 118px;
 }
 
@@ -483,9 +443,7 @@ img {
   animation-delay: 0.58s;
 }
 
-.hero-copy,
-.section-heading,
-.site-footer {
+.hero-copy {
   color: var(--cream);
 }
 
@@ -723,13 +681,11 @@ h3 {
   transform: translateY(-2px);
 }
 
+/* Identical card wrapper — every content section (and the footer) shares
+   exactly the same border, radius, surface, shadow and blur. The hero is
+   the only intentional exception (full-bleed cinematic section). */
 .profile-card,
-.content-band,
-.education-section,
-.certificates-section,
-.resume-section,
-.details-section,
-.contact-form-section {
+.section-card {
   border: 1px solid rgba(243, 240, 229, 0.32);
   border-radius: 8px;
   background: rgba(243, 240, 229, 0.92);
@@ -812,37 +768,25 @@ h3 {
   color: var(--accent-dark);
 }
 
-.content-band,
-.education-section,
-.certificates-section,
-.resume-section,
-.details-section,
-.contact-form-section {
+.section-card {
   padding: 42px;
   margin-bottom: 36px;
 }
 
-.content-band .section-heading,
-.education-section .section-heading,
-.certificates-section .section-heading,
-.resume-section .section-heading,
-.details-section .section-heading,
-.contact-form-section .section-heading {
+/* Uniform heading treatment inside every card: ink title + accent eyebrow.
+   The hero keeps its own gold eyebrow / cream copy (scoped under .hero). */
+.section-card .section-heading {
   color: var(--ink);
 }
 
-.content-band .eyebrow,
-.education-section .eyebrow,
-.certificates-section .eyebrow,
-.resume-section .eyebrow,
-.details-section .eyebrow,
-.contact-form-section .eyebrow {
+.section-card .eyebrow {
   color: var(--accent-dark);
 }
 
 .section-heading {
   max-width: 760px;
   margin-bottom: 28px;
+  color: var(--ink);
 }
 
 /* ── About section (Phase 5, resume-backed) ── */
@@ -972,22 +916,21 @@ h3 {
 .info-card p,
 .project-copy p,
 .timeline-content p,
-.education-grid p,
-.site-footer p {
+.education-grid p {
   color: var(--muted);
 }
 
+/* Experience: heading sits on top like every other card; the timeline is
+   the section's own inner layout (kept readable with a max width). */
 .split-section {
-  display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
-  gap: 42px;
-  align-items: start;
+  display: block;
 }
 
 .timeline {
   position: relative;
   display: grid;
   gap: 18px;
+  max-width: 900px;
 }
 
 .timeline::before {
@@ -1375,32 +1318,41 @@ h3 {
   grid-template-columns: 1fr 1fr;
   gap: 32px;
   align-items: center;
-  padding-bottom: 56px;
+  color: var(--ink);
 }
 
 .site-footer h2 {
   margin-bottom: 12px;
 }
 
-.site-footer p {
-  color: rgba(255, 255, 255, 0.72);
-}
+/* Footer copy intentionally inherits .site-footer's color so every theme
+   (which recolors the footer surface + text together) keeps contrast. */
 
 .footer-links {
   justify-content: flex-end;
   margin-top: 0;
 }
 
+/* Footer links use the exact same recipe as the top nav links so every
+   section link on the page matches in color, radius and hover state.
+   Color is inherited so each theme's footer text color applies (the theme
+   recolors the footer surface and text together); the hover pair matches
+   .primary-nav a:hover exactly. */
 .footer-links a {
+  min-height: 42px;
   padding: 0 14px;
-  color: var(--white);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: inherit;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 700;
 }
 
 .footer-links a:hover {
-  background: rgba(255, 255, 255, 0.16);
-  transform: translateY(-2px);
+  color: var(--accent-dark);
+  background: var(--accent-soft);
+  transform: translateY(-1px);
 }
 
 .reveal {
@@ -1453,11 +1405,11 @@ h3 {
 @keyframes headerDrop {
   from {
     opacity: 0;
-    transform: translate(-50%, -16px);
+    transform: translateY(-16px);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translateY(0);
   }
 }
 
@@ -1577,7 +1529,6 @@ h3 {
 
 @media (max-width: 980px) {
   .hero,
-  .split-section,
   .project-showcase,
   .site-footer {
     grid-template-columns: 1fr;
@@ -1603,44 +1554,22 @@ h3 {
 }
 
 @media (max-width: 880px) {
-  /* Nav collapses to hamburger earlier than the layout does:
-     6 desktop links + brand overflow the header at 768px. */
-  .menu-toggle {
-    display: block;
-  }
-
+  /* Static bar has no dropdown — the 6 section links wrap onto extra
+     rows instead of collapsing behind a hamburger. */
   .primary-nav {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    left: 0;
-    display: none;
-    padding: 10px;
-    border-radius: 8px;
-    background: rgba(243, 240, 229, 0.97);
-    box-shadow: var(--shadow);
-  }
-
-  .primary-nav.is-open {
-    display: grid;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .primary-nav a {
     justify-content: center;
+    padding: 0 10px;
   }
 }
 
 @media (max-width: 760px) {
-  html {
-    scroll-padding-top: 86px;
-  }
-
-  .site-header {
-    top: 12px;
-  }
-
   .hero {
-    padding-top: 124px;
+    padding-top: 40px;
   }
 
   /* Mobile video alternative (Phase 7): skip the background video
@@ -1651,15 +1580,9 @@ h3 {
 
   .section {
     width: min(100% - 24px, 1120px);
-    padding: 52px 0;
   }
 
-  .content-band,
-  .education-section,
-  .certificates-section,
-  .resume-section,
-  .details-section,
-  .contact-form-section {
+  .section-card {
     padding: 26px;
   }
 

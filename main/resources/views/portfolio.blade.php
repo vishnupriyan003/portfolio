@@ -80,10 +80,6 @@
       <span>{{ $content['name'] }}</span>
     </a>
 
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNav" aria-label="Open navigation">
-      <span></span><span></span><span></span>
-    </button>
-
     <nav class="primary-nav" id="primaryNav" aria-label="Primary navigation">
       <a href="#home" class="nav-link">Home</a>
       <a href="#about" class="nav-link">About</a>
@@ -145,7 +141,7 @@
       </div>
     </section>
 
-    <section id="about" class="section content-band" aria-labelledby="aboutTitle">
+    <section id="about" class="section section-card content-band" aria-labelledby="aboutTitle">
       <div class="section-heading">
         <p class="eyebrow">About</p>
         <h2 id="aboutTitle">{{ $content['about_title'] }}</h2>
@@ -170,7 +166,7 @@
       </div>
     </section>
 
-    <section id="skills" class="section content-band">
+    <section id="skills" class="section section-card content-band">
       <div class="section-heading">
         <p class="eyebrow">Capabilities</p>
         <h2>Skills shaped by real web application work.</h2>
@@ -187,7 +183,7 @@
       </div>
     </section>
 
-    <section id="experience" class="section split-section">
+    <section id="experience" class="section section-card split-section">
       <div class="section-heading">
         <p class="eyebrow">Experience</p>
         <h2>Practical development across internship and junior developer roles.</h2>
@@ -208,7 +204,7 @@
       </div>
     </section>
 
-    <section id="projects" class="section content-band">
+    <section id="projects" class="section section-card content-band">
       <div class="section-heading">
         <p class="eyebrow">Featured Project</p>
         <h2>{{ $content['project_title'] }}</h2>
@@ -241,7 +237,7 @@
       </div>
     </section>
 
-    <section class="section education-section" aria-labelledby="educationTitle">
+    <section class="section section-card education-section" aria-labelledby="educationTitle">
       <div class="section-heading">
         <p class="eyebrow">Education</p>
         <h2 id="educationTitle">Academic Profile</h2>
@@ -257,7 +253,7 @@
       </div>
     </section>
 
-    <section class="section certificates-section" aria-labelledby="certificatesTitle">
+    <section class="section section-card certificates-section" aria-labelledby="certificatesTitle">
       <div class="section-heading">
         <p class="eyebrow">Certifications</p>
         <h2 id="certificatesTitle">Learning & Certificates</h2>
@@ -276,7 +272,7 @@
       </div>
     </section>
 
-    <section class="section details-section" aria-labelledby="detailsTitle">
+    <section class="section section-card details-section" aria-labelledby="detailsTitle">
       <div class="section-heading">
         <p class="eyebrow">Additional Details</p>
         <h2 id="detailsTitle">Resume-backed strengths.</h2>
@@ -297,7 +293,7 @@
       </div>
     </section>
 
-    <section class="section resume-section" aria-labelledby="resumeTitle">
+    <section class="section section-card resume-section" aria-labelledby="resumeTitle">
       <div class="section-heading">
         <p class="eyebrow">Resume</p>
         <h2 id="resumeTitle">Preview and Download</h2>
@@ -312,7 +308,7 @@
       </a>
     </section>
 
-    <section id="contact-form" class="section contact-form-section" aria-labelledby="contactFormTitle">
+    <section id="contact-form" class="section section-card contact-form-section" aria-labelledby="contactFormTitle">
       <div class="section-heading">
         <p class="eyebrow">Start A Conversation</p>
         <h2 id="contactFormTitle">Send a project message</h2>
@@ -356,7 +352,7 @@
     <p></p>
   </div>
 
-  <footer id="contact" class="site-footer section">
+  <footer id="contact" class="site-footer section section-card">
     <div>
       <p class="eyebrow">Contact</p>
       <h2>Let us build something useful.</h2>

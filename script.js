@@ -1,5 +1,3 @@
-const nav = document.getElementById("primaryNav");
-const menuToggle = document.querySelector(".menu-toggle");
 const navLinks = document.querySelectorAll(".nav-link");
 const sections = document.querySelectorAll(".section[id], footer[id]");
 const lightbox = document.getElementById("certificateLightbox");
@@ -73,23 +71,6 @@ if (canAnimateCursor && cursorDot && cursorRing) {
   drawCursor();
 }
 
-function setMenuState(isOpen) {
-  nav.classList.toggle("is-open", isOpen);
-  document.body.classList.toggle("menu-open", isOpen);
-  menuToggle.setAttribute("aria-expanded", String(isOpen));
-  menuToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
-}
-
-menuToggle.addEventListener("click", () => {
-  setMenuState(!nav.classList.contains("is-open"));
-});
-
-navLinks.forEach((link) => {
-  link.addEventListener("click", () => {
-    setMenuState(false);
-  });
-});
-
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -162,14 +143,12 @@ lightbox.addEventListener("click", (event) => {
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
-    setMenuState(false);
     closeLightbox();
   }
 });
 
-// Scroll progress bar + condensed header (Phase 3) — rAF-throttled
+// Scroll progress bar (Phase 3) — rAF-throttled
 const progressBar = document.querySelector(".scroll-progress span");
-const siteHeader = document.querySelector(".site-header");
 let scrollTicking = false;
 
 function paintScrollState() {
@@ -179,10 +158,6 @@ function paintScrollState() {
 
   if (progressBar) {
     progressBar.style.width = `${percent}%`;
-  }
-
-  if (siteHeader) {
-    siteHeader.classList.toggle("is-scrolled", window.scrollY > 24);
   }
 
   scrollTicking = false;
