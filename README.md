@@ -1,31 +1,28 @@
-# portfolio
-
 # Portfolio — Vishnupriyan R
 
-Professional developer portfolio featuring a live **Multi-Design Theme Customization Engine** supporting seven complete visual design systems (Nature Cinematic, Flat Design, Neumorphism, Glassmorphism, Skeuomorphism, Brutalism, Material Design), all sharing the same content, data, and responsive functionality.
+Professional developer portfolio built with Laravel 9, featuring a single polished **"Editorial Light"** design: warm off-white canvas, Instrument Serif display typography, centered hero with a black-and-white portrait and floating info cards, white rounded card sections, and a monochrome palette with restrained pastel accent chips.
 
 ## Live Website
 - **URL:** [https://vishnupriyanweb.free.nf/](https://vishnupriyanweb.free.nf/)
 
 ## Tech Stack
-- **Backend:** Laravel 9 (PHP 8.2) · MySQL
-- **Frontend:** Vanilla JavaScript (Modern ES6+) · Scoped Modular CSS · SVG Vector Graphics
-- **Architecture:** Multi-Theme Engine (`data-theme`), Zero-FOUC persistence, Offline-first self-hosted assets (OFL Fraunces & Inter)
+- **Backend:** Laravel 9 (PHP 8.0/8.2) · MySQL
+- **Frontend:** Vanilla JavaScript (Modern ES6+) · Single design-system CSS · Inline SVG vector graphics
+- **Typography:** Instrument Serif (display, regular + italic) & Inter (UI/body) — self-hosted OFL woff2, no CDN requests
 
-## Visual Design Systems
-1. **Nature Cinematic (Default):** Forest green & warm cream, editorial typography, atmospheric looped video hero.
-2. **Flat Design:** Minimalist solid surfaces, 0px shadows, 0 gradients, crisp lines, neo-grotesque hierarchy (with Light/Dark modes).
-3. **Neumorphism:** Soft UI dual-shadow extruded and inset components, pill controls (with Light/Dark modes).
-4. **Glassmorphism:** Multi-layered frosted glass panels (`backdrop-filter: blur(16px)`), luminous borders, aurora mesh gradients.
-5. **Skeuomorphism:** Tactile parchment surfaces, stitched borders, 3D beveled buttons, and letterpress typography.
-6. **Brutalism / Neubrutalism:** Thick 3.5px solid black borders, hard offset 5px black drop shadows, high-voltage pop colors.
-7. **Material Design:** Material 3 elevation surfaces (dp levels), rounded card containers, and clean Roboto typography (with Light/Dark modes).
+## Design System
+- **Canvas:** warm off-white `#f6f4ef` with white rounded cards (thin borders, soft shadows)
+- **Type:** Instrument Serif headlines with italic accent lines · Inter for UI and body copy
+- **Actions:** dark pill buttons (`Hire Me`, submit) paired with white pill buttons (`Download Resume`)
+- **Nav:** static top bar — logo left, centered pill navigation with active-section state, dark CTA right (wraps to a second row on mobile, no hamburger)
+- **Accents:** pastel green / orange / purple chips used sparingly for icons, tags and highlights
+- **Hero:** centered editorial headline + rotating designation, B&W arch-framed portrait, floating stat cards with thin connector lines, circular "open to relocate" badge
 
 ## Key Features
-- **Live Customization Drawer:** Slide-over panel on desktop, ergonomic bottom-sheet on mobile devices (`< 768px`).
-- **Zero-FOUC:** Synchronous `<head>` loader prevents any flash of wrong theme on page load.
-- **Context-Aware Media:** Looping hero video is automatically paused and hidden on non-nature themes to reveal bespoke theme textures.
-- **Accessible & Motion-Aware:** Full keyboard navigation (`Tab` / `Escape`), ARIA dialog standards, and strict adherence to `prefers-reduced-motion`.
+- DB-driven content with `/vpadmin` admin editor (all copy, skills, projects, certificates and settings come from the `settings` table)
+- Reveal-on-scroll animations, custom cursor, scroll progress bar, certificate lightbox, contact form with validation
+- Fully responsive (360 → 1920 px) and `prefers-reduced-motion` aware
+- Self-hosted fonts and assets — zero third-party runtime requests; SEO meta + JSON-LD Person schema
 
 ## Local Development
 ```bash
@@ -33,6 +30,6 @@ Professional developer portfolio featuring a live **Multi-Design Theme Customiza
 git clone https://github.com/vishnupriyan003/portfolio.git
 cd portfolio
 
-# Run via XAMPP or PHP built-in server
+# Run via XAMPP or PHP built-in server (project root = front controller)
 php -S localhost:8000
 ```

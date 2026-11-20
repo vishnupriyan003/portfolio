@@ -22,6 +22,7 @@
 | **7** | Responsive: 360 / 390 / 768 / 1366 / 1920 px, mobile video alternative | ✅ **Complete** | Report below |
 | **8** | Performance / accessibility / SEO: lazy loading, sitemap.xml, cursor fix, debug flag, `.env` guidance | ⬜ Not started | |
 | **9** | Testing checklist + InfinityFree deployment + live verification | ⬜ Not started | |
+| **10** | **Editorial-light full UI reset** (reference-driven): static pill header, light hero w/ B&W portrait, all sections restyled, theme engine removed | ✅ **Complete** | Report below |
 
 ---
 
@@ -199,6 +200,7 @@
 - **Phase 7** — ✅ Complete. Nav hamburger breakpoint at 880 (768 overflow fix), mobile video skipped (poster-only, download aborted), `100dvh` hero, breakpoint walkthrough. Commit: `phase-7-responsive`.
 - **Theme Customization Engine** — ✅ Complete. Live multi-design customization engine supporting 7 full visual design systems (Nature Cinematic, Flat, Neumorphism, Glassmorphism, Skeuomorphism, Brutalism, Material Design); modular CSS (`themes/*.css`); floating FAB trigger button; slide-over drawer with SVG preview cards and component mini-samples; zero-FOUC anti-flash head script; safe localStorage persistence; media synchronization. Documentation: `THEME_SYSTEM.md`.
 - **Static Header + Uniform Section Cards Redesign** — ✅ Complete. Fixed floating header menu replaced by a **static top nav bar** (same 1120px container as the sections, in normal flow, scrolls away; hamburger + dropdown + `is-scrolled` state removed — the 6 section links wrap to extra rows ≤880px). All 10 content sections (About, Skills, Experience, Projects, Education, Certificates, Details, Resume, Contact form, Footer) now share one identical `.section-card` wrapper (same border/radius/surface/shadow/blur, 42px padding → 26px mobile, 36px rhythm) via a single CSS rule; Experience heading moved on top of the timeline; footer recolored to card styling with links using the exact nav-link recipe (`color: inherit` so every theme's footer contrast holds). Headings unified (ink title + accent eyebrow in all cards; hero keeps gold/cream). `scroll-padding-top` 96→16px, hero `padding-top` 136→48px + `calc(100dvh - 96px)` fold fix (base + nature theme). Theme engine untouched and audited (7/7 theme header/footer/eyebrow rules verified against the new static/card structure). Verified: `node --check` OK · CSS braces 312/312 · `GET /` HTTP 200 (31.7 KB, 0 PHP warnings) · 17/17 render assertions PASS (no `menu-toggle`, 6 nav links, 10 `section-card`, all section ids, form, lightbox, theme drawer, hero video) · 11/11 served-CSS assertions PASS. Commit: `redesign-static-header-uniform-cards`.
+- **Editorial-Light Full UI Reset (Phase 10)** — ✅ Complete. See report below. Commit: `redesign-editorial-light`.
 
 ---
 
@@ -232,4 +234,23 @@
 - Blade compilation: Render test passed successfully, all theme elements rendered.
 - Zero FOUC: `<head>` script executes synchronously before body paint.
 - Video sync: `#myVideo` pauses and hides automatically when switching to any theme other than Nature Cinematic, and resumes when switching back.
+
+> **Note (Phase 10):** the theme engine described above was **removed** on 2026-11-20 by user decision during the editorial-light reset. This section is retained as history only — `themes/`, `theme-engine/`, the FAB/drawer markup and `THEME_SYSTEM.md` no longer exist.
+
+---
+
+## Phase 10 Report — Editorial-Light Full UI Reset (Complete)
+
+**Scope:** complete visual reset to a reference-driven "editorial light" design for a developer portfolio; content, data and routes untouched. **Files changed:** `style.css` (full rewrite, 1389 lines), `portfolio.blade.php`, `script.js`, `main/app/Http/Controllers/PortfolioController.php` (PHP 8.0 contact-save fix, see below), `README.md`, `ASSET_CREDITS.md`, `PROJECT_STATUS.md`. **Deleted:** `themes/*.css` (7), `theme-engine/*.js` (3), `assets/textures/paper-fiber.svg` + `brutalist-grid.svg`, `THEME_SYSTEM.md`. **New:** `assets/fonts/instrumentserif-latin-400-normal.woff2` (20.5 KB) + `-italic.woff2` (21.6 KB) + `OFL-InstrumentSerif.txt`.
+
+1. **Theme engine removed** — FAB, slide-over drawer, backdrop, anti-FOUC `<head>` script, 3 theme `<script>` tags, `ThemeManager.init()`, theme entries in the cursor selector and all `@import`s are gone. Zero `data-theme` / `theme-` references remain in rendered output.
+2. **Typography** — display face switched from Fraunces to **Instrument Serif** (regular + italic, self-hosted OFL, preloaded, verified `wOF2`); Inter 400–800 kept for UI/body. Fraunces retired (files kept, no longer loaded).
+3. **Header** — 3-part reference layout: logo left · **centered white pill nav** (6 section links, active = dark nested pill, scroll-spy + `aria-current` kept) · dark pill **Hire Me →** CTA right. Static (scrolls away); ≤880px the pill nav wraps to its own row — no hamburger.
+4. **Hero (video hero removed)** — forest video, `hero-still`, `site-overlay`, particles, grain and scroll cue all deleted. New centered composition: serif H1 (`hero_title`) → **italic rotating designation** → gray summary → dark/white pill CTA pair → stage with arch-framed **B&W portrait** (`grayscale(1)`, 4:5), floating white stat cards (DB `stats` + view count) joined by thin SVG connector lines, 3 pastel skill chips (DB skill titles), circular "OPEN TO RELOCATE · KARUR, TAMIL NADU" textPath badge, and DB-driven micro-labels (location / relocation).
+5. **All sections restyled** — warm off-white canvas `#f6f4ef`, white `.section-card`s (1px `--line`, 24px radius, soft shadow), centered serif section headings + uppercase eyebrows, pastel icon chips (green/orange/purple via `nth-child`), ink timeline markers, pill tags/education year chips, light pill form inputs with dark focus ring, footer link pills that go dark on hover.
+6. **Kept intact** — all DB content & `/vpadmin`, contact route + validation, certificate lightbox, reveal-on-scroll + staggers, custom cursor, scroll progress, preloader, skip link, JSON-LD/SEO, reduced-motion + coarse-pointer rules, responsive 360→1920.
+
+**Verification:** `node --check script.js` OK · `style.css` braces balanced (244/244) · `GET /` → HTTP 200 (29.1 KB) with 0 PHP warnings · 24/24 rendered-output assertions PASS (header/hero/sections/theme-removal) · contrast AA 12/12 pairs ≥ 4.5:1 · contact POST: empty payload → 302 (validation), full payload → 302 + success flash + 0 errors · fonts verified `wOF2` + OFL present.
+
+**Side fix (same commit):** `PortfolioController::storeContact()` used `...$data` spread inside an array literal — string-key unpacking requires PHP ≥ 8.1 and threw `Cannot unpack array with string keys` (HTTP 500) on this box's PHP 8.0.30 whenever the form was submitted with valid data. Replaced with `array_merge($data, [...])`, which behaves identically on 8.1+/production. Verified: full-payload POST now 302 → success flash renders, no new log errors.
 

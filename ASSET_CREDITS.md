@@ -1,4 +1,4 @@
-# ASSET CREDITS — Vishnupriyan Portfolio (nature-cinematic redesign)
+# ASSET CREDITS — Vishnupriyan Portfolio (editorial-light redesign)
 
 Every asset used on this site is **stored locally** in `assets/` (or `image/`) — nothing is hotlinked from third-party CDNs.
 Legend: **Source** = where it came from · **License** = usage terms verified on the stated date · **Origin** = downloaded / self-generated / pre-existing.
@@ -29,10 +29,11 @@ No font is hotlinked — all files live in the project and are preloaded via `@f
 
 | File(s) | Family | License | Origin | Notes |
 |---------|--------|---------|--------|-------|
-| `fraunces-latin-500-normal.woff2` (17.6 KB) · `fraunces-latin-600-normal.woff2` (17.7 KB) | **Fraunces** — display serif (headings) | SIL Open Font License 1.1 (`OFL-Fraunces.txt` in this folder) | downloaded via official `@fontsource/fraunces` npm package (2026-11-19) | latin subset only |
+| `instrumentserif-latin-400-normal.woff2` (20.5 KB) · `instrumentserif-latin-400-italic.woff2` (21.6 KB) | **Instrument Serif** — display serif (headlines + italic accent lines) | SIL Open Font License 1.1 (`OFL-InstrumentSerif.txt` in this folder) | downloaded from the official Google Fonts CDN (`fonts.gstatic.com`, 2026-11-20); byte-identical source also mirrored by the official `@fontsource/instrument-serif` npm package | latin subset only; verified `wOF2` magic bytes |
 | `inter-latin-400/500/600/700/800-normal.woff2` (23–24 KB each) | **Inter** — UI/body sans | SIL Open Font License 1.1 (`OFL-Inter.txt`) | downloaded via official `@fontsource/inter` npm package (2026-11-19) | latin subset only |
+| `fraunces-latin-500-normal.woff2` · `fraunces-latin-600-normal.woff2` | Fraunces — **retired** (no longer referenced after the UI reset) | SIL Open Font License 1.1 (`OFL-Fraunces.txt`) | downloaded via `@fontsource/fraunces` (2026-11-19) | kept on disk, not loaded |
 
-Total font payload: ~154 KB (7 files, woff2, subsetted to latin).
+Total active font payload: ~171 KB (7 files, woff2, subsetted to latin).
 
 ## Site images (`image/` — pre-existing, optimized in place)
 
@@ -58,8 +59,11 @@ All files below already existed in the project. Phase 2 **recompressed them in p
 
 | Item | Reason |
 |------|--------|
+| `assets/videos/hero-forest.mp4` + `hero-forest-poster.jpg`/`.webp` | Licensed and verified (Mixkit), but the **editorial-light UI reset removed the video hero** — files kept on disk, no longer rendered. |
+| `assets/textures/grain.png` / `.webp` | Self-authored film grain for the old cinematic overlay — no longer rendered after the UI reset. |
+| `assets/textures/paper-fiber.svg` · `brutalist-grid.svg` | Textures for the removed Skeuomorphism/Brutalism themes — **deleted** with the theme engine (2026-11-20). |
 | `new theme/12716-241674181.mp4` (31.1 MB) | Source/license unverified → excluded from the design by user decision (Phase 0). Left in place; not deleted. |
-| `bg.mp4` | Referenced by the current hero but **missing from the project** (404) — replaced by the licensed clip above in Phase 4. |
+| `bg.mp4` | Referenced by the old hero but **missing from the project** (404) — superseded in Phase 4; hero since removed. |
 | Mixkit clip `22729` ("Gloomy forest…", 4.1 MB) | Downloaded during Phase 2 selection but its actual footage was **not** a forest (listing/asset mismatch) → discarded, not used. |
 
 ---

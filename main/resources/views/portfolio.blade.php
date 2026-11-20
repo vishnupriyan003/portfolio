@@ -21,20 +21,9 @@
   <meta name="twitter:image" content="{{ asset('image/vishnupriyan_r.jpg') }}">
   <link rel="icon" type="image/png" href="{{ asset('image/icon.png') }}">
   <title>{{ $content['seo_title'] }}</title>
-  <link rel="preload" href="{{ asset('assets/fonts/fraunces-latin-600-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ asset('assets/fonts/instrumentserif-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ asset('assets/fonts/instrumentserif-latin-400-italic.woff2') }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ asset('assets/fonts/inter-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
-  <script>
-    (function () {
-      try {
-        var t = localStorage.getItem("vp_portfolio_theme") || "nature";
-        var m = localStorage.getItem("vp_portfolio_theme_mode") || "default";
-        document.documentElement.setAttribute("data-theme", t);
-        if (m && m !== "default") {
-          document.documentElement.setAttribute("data-theme-mode", m);
-        }
-      } catch (e) {}
-    })();
-  </script>
   <link rel="stylesheet" href="{{ asset('style.css') }}">
   @php
     $schema = [
@@ -67,13 +56,6 @@
   <div class="cursor-dot" aria-hidden="true"></div>
   <div class="cursor-ring" aria-hidden="true"></div>
 
-  <img class="hero-still" src="{{ asset('assets/videos/hero-forest-poster.jpg') }}" alt="" aria-hidden="true" fetchpriority="high" decoding="async">
-  <video autoplay muted loop playsinline preload="metadata" id="myVideo"
-         poster="{{ asset('assets/videos/hero-forest-poster.jpg') }}" aria-hidden="true">
-    <source src="{{ asset('assets/videos/hero-forest.mp4') }}" type="video/mp4">
-  </video>
-  <div class="site-overlay" aria-hidden="true"></div>
-
   <header class="site-header">
     <a class="brand" href="#home" aria-label="{{ $content['name'] }} home">
       <img src="{{ asset('image/logo.png') }}" alt="">
@@ -88,6 +70,10 @@
       <a href="#projects" class="nav-link">Projects</a>
       <a href="#contact" class="nav-link">Contact</a>
     </nav>
+
+    <a class="btn btn-primary header-cta" href="#contact-form">Hire Me
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+    </a>
   </header>
 
   <main id="main" tabindex="-1">
@@ -104,40 +90,70 @@
           ->take(5);
     @endphp
     <section id="home" class="hero section">
-      <div class="hero-particles" aria-hidden="true"></div>
       <div class="hero-copy">
-        <p class="eyebrow">
+        <h1>{{ $content['hero_title'] }}</h1>
+        <p class="hero-italic">
           <span class="sr-only">{{ $content['role'] }}</span>
           <span class="designation-rotator" aria-hidden="true" data-designations='@json($designations)'>{{ $designations[0] ?? $content['role'] }}</span>
         </p>
-        <h1>{{ $content['hero_title'] }}</h1>
         <p class="hero-summary">{{ $content['summary'] }}</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#contact-form"><x-icon name="envelope" /> Hire Me</a>
+          <a class="btn btn-primary" href="#contact-form">Hire Me
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+          </a>
           <a class="btn btn-secondary" href="{{ asset($content['resume_pdf']) }}" download><x-icon name="download" /> Download Resume</a>
-        </div>
-        <div class="popularity-badge" aria-label="Portfolio popularity">
-          <x-icon name="trending" />
-          <span>{{ number_format($views) }} portfolio views</span>
         </div>
       </div>
 
-      <aside class="profile-card" aria-label="Profile highlights">
-        <img class="profile-photo" src="{{ asset('image/vishnupriyan_r.jpg') }}" alt="{{ $content['name'] }}">
-        <div>
-          <h2>{{ $content['name'] }}</h2>
-          <p>{{ $content['role'] }}</p>
-        </div>
-        <div class="quick-stats">
-          @foreach ($content['stats'] as $stat)
-            <span><strong>{{ $stat['value'] }}</strong> {{ $stat['label'] }}</span>
-          @endforeach
-        </div>
-      </aside>
+      <div class="hero-stage">
+        <svg class="hero-connectors" aria-hidden="true" viewBox="0 0 1000 560" preserveAspectRatio="none">
+          <path d="M180 150 C 300 210, 360 250, 430 300" />
+          <path d="M830 175 C 720 230, 655 275, 585 315" />
+        </svg>
 
-      <div class="scroll-cue" aria-hidden="true">
-        <span class="scroll-cue-mouse"><span></span></span>
-        <span class="scroll-cue-label">Scroll</span>
+        <aside class="float-card float-card-left" aria-label="Quick highlights">
+          <span class="chip-icon chip-green"><x-icon name="award" /></span>
+          <div class="float-stats">
+            @foreach ($content['stats'] as $stat)
+              <span><strong>{{ $stat['value'] }}</strong> {{ $stat['label'] }}</span>
+            @endforeach
+          </div>
+        </aside>
+
+        <aside class="float-card float-card-right" aria-label="Portfolio popularity">
+          <span class="chip-icon chip-purple"><x-icon name="trending" /></span>
+          <p class="float-stat-value">{{ number_format($views) }}</p>
+          <p class="float-stat-label">portfolio views</p>
+        </aside>
+
+        <figure class="hero-portrait">
+          <img src="{{ asset('image/vishnupriyan_r.jpg') }}" alt="{{ $content['name'] }}" fetchpriority="high" decoding="async">
+        </figure>
+
+        @foreach (collect($content['skills'])->take(3) as $index => $skill)
+          <span class="photo-chip photo-chip-{{ $index + 1 }}" aria-hidden="true">
+            <span class="photo-dot photo-dot-{{ $index + 1 }}"></span>{{ $skill['title'] }}
+          </span>
+        @endforeach
+
+        <div class="hero-badge" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <defs>
+              <path id="badgeCircle" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0" />
+            </defs>
+            <text><textPath href="#badgeCircle">OPEN TO RELOCATE · KARUR, TAMIL NADU · </textPath></text>
+            <text class="badge-star" x="60" y="67" text-anchor="middle">✦</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="hero-meta hero-meta-left" aria-hidden="true">
+        <span class="meta-rule"></span>
+        <p>Based in {{ $content['location'] }}</p>
+      </div>
+      <div class="hero-meta hero-meta-right" aria-hidden="true">
+        <p>{{ $content['relocation'] }}</p>
+        <span class="meta-star">✦</span>
       </div>
     </section>
 
@@ -366,64 +382,6 @@
     </div>
   </footer>
 
-  <!-- Floating Theme Customization Trigger Button -->
-  <button class="theme-settings-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="themeCustomizationDrawer" aria-label="Customize Design">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="3"></circle>
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-    </svg>
-    <span class="theme-settings-tooltip">Customize Design</span>
-  </button>
-
-  <!-- Theme Customization Drawer Backdrop -->
-  <div class="theme-drawer-backdrop" id="themeDrawerBackdrop" aria-hidden="true"></div>
-
-  <!-- Theme Customization Slide-Over Drawer -->
-  <aside class="theme-drawer" id="themeCustomizationDrawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="themeDrawerTitle">
-    <div class="theme-drawer-header">
-      <div class="theme-drawer-title-wrap">
-        <h2 id="themeDrawerTitle">Customize Your Experience</h2>
-        <span class="theme-drawer-subtitle">7 Live Visual Design Systems</span>
-      </div>
-      <button class="theme-drawer-close" type="button" aria-label="Close customization panel">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
-
-    <div class="theme-drawer-body">
-      <!-- Optional Variant Mode Toggle (for themes that support Light/Dark) -->
-      <section class="theme-variant-section is-hidden" id="themeVariantSection" aria-label="Theme mode variants">
-        <span class="theme-variant-label">Color Variant</span>
-        <div class="theme-mode-buttons">
-          <button class="theme-mode-btn is-active" type="button" data-mode-btn="default" aria-pressed="true">Default</button>
-          <button class="theme-mode-btn" type="button" data-mode-btn="light" aria-pressed="false">Light</button>
-          <button class="theme-mode-btn" type="button" data-mode-btn="dark" aria-pressed="false">Dark</button>
-        </div>
-      </section>
-
-      <!-- Theme Cards List -->
-      <div class="theme-cards-list" id="themeCardsContainer" role="radiogroup" aria-label="Available themes">
-        <!-- Injected dynamically by ThemeManager -->
-      </div>
-    </div>
-
-    <div class="theme-drawer-footer">
-      <button class="theme-reset-btn" id="themeResetBtn" type="button">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-          <path d="M3 3v5h5"></path>
-        </svg>
-        Reset to Default (Nature)
-      </button>
-    </div>
-  </aside>
-
-  <script src="{{ asset('theme-engine/theme-config.js') }}"></script>
-  <script src="{{ asset('theme-engine/theme-storage.js') }}"></script>
-  <script src="{{ asset('theme-engine/theme-manager.js') }}"></script>
   <script src="{{ asset('script.js') }}"></script>
 </body>
 </html>

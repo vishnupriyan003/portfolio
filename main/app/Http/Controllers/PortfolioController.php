@@ -30,11 +30,10 @@ class PortfolioController extends Controller
             'message' => ['required', 'string', 'min:10', 'max:3000'],
         ]);
 
-        ContactMessage::create([
-            ...$data,
+        ContactMessage::create(array_merge($data, [
             'ip_address' => $request->ip(),
             'user_agent' => substr((string) $request->userAgent(), 0, 255),
-        ]);
+        ]));
 
         return back()->with('contact_success', 'Message sent successfully. I will get back to you soon.');
     }

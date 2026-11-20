@@ -11,11 +11,6 @@ const animatedItems = document.querySelectorAll(
   ".content-band, .split-section, .education-section, .certificates-section, .details-section, .resume-section, .contact-form-section, .info-card, .timeline-item, .project-points span, .project-list article, .education-grid article, .certificate-card, .certificate-note, .details-grid article, .resume-preview-images img"
 );
 
-// Initialize Multi-Design Theme Engine
-if (typeof ThemeManager !== "undefined") {
-  ThemeManager.init();
-}
-
 document.body.classList.add("is-loaded");
 
 function hidePreloader() {
@@ -63,7 +58,7 @@ if (canAnimateCursor && cursorDot && cursorRing) {
     }
   });
 
-  document.querySelectorAll("a, button, input, textarea, .certificate-card, .theme-preview-card, .theme-settings-btn, .theme-drawer-close, .theme-mode-btn, .theme-reset-btn").forEach((item) => {
+  document.querySelectorAll("a, button, input, textarea, .certificate-card").forEach((item) => {
     item.addEventListener("mouseenter", () => cursorRing.classList.add("is-active"));
     item.addEventListener("mouseleave", () => cursorRing.classList.remove("is-active"));
   });
@@ -204,72 +199,5 @@ if (rotator && !prefersReducedMotion.matches) {
   }
 }
 
-// Scroll cue — hide once the visitor leaves the hero
-const scrollCue = document.querySelector(".scroll-cue");
-if (scrollCue) {
-  window.addEventListener(
-    "scroll",
-    () => {
-      scrollCue.classList.toggle("is-hidden", window.scrollY > 120);
-    },
-    { passive: true }
-  );
-}
-
-// Ambient hero particles — decorative, skipped for reduced motion
-const particleHost = document.querySelector(".hero-particles");
-if (particleHost && !prefersReducedMotion.matches) {
-  const PARTICLE_COUNT = 16;
-  const frag = document.createDocumentFragment();
-
-  for (let i = 0; i < PARTICLE_COUNT; i += 1) {
-    const dot = document.createElement("span");
-    dot.className = "particle" + (i % 2 ? " is-sage" : "");
-    dot.style.left = `${Math.random() * 100}%`;
-    dot.style.setProperty("--drift", `${(Math.random() - 0.5) * 80}px`);
-    dot.style.animationDuration = `${9 + Math.random() * 9}s`;
-    dot.style.animationDelay = `${-Math.random() * 16}s`;
-    dot.style.width = dot.style.height = `${2 + Math.random() * 3}px`;
-    frag.appendChild(dot);
-  }
-
-  particleHost.appendChild(frag);
-}
-
-// Reduced motion: stop the hero video (the static poster still shows)
-const heroVideo = document.getElementById("myVideo");
-
-// Mobile (Phase 7): abort the video download entirely — CSS hides it and
-// the poster still layer serves as the background instead.
-const skipVideoForViewport = heroVideo !== null
-  && window.matchMedia("(max-width: 760px)").matches;
-
-if (skipVideoForViewport) {
-  heroVideo.pause();
-  heroVideo.removeAttribute("autoplay");
-  heroVideo.querySelectorAll("source").forEach((source) => source.remove());
-  heroVideo.load(); // cancels any in-flight request
-}
-
-function applyMotionPreference(event) {
-  if (!heroVideo || skipVideoForViewport) return;
-
-  const currentTheme = typeof ThemeManager !== "undefined" ? ThemeManager.getCurrentTheme() : "nature";
-  if (currentTheme !== "nature") {
-    heroVideo.pause();
-    return;
-  }
-
-  if (event.matches) {
-    heroVideo.pause();
-    heroVideo.removeAttribute("autoplay");
-  } else {
-    heroVideo.setAttribute("autoplay", "");
-    heroVideo.play().catch(() => {
-      /* autoplay blocked — poster fallback remains visible */
-    });
-  }
-}
-
-applyMotionPreference(prefersReducedMotion);
-prefersReducedMotion.addEventListener("change", applyMotionPreference);
+// Reduced motion: the rotator and reveals are gated above; nothing else to
+// animate — the light editorial hero has no video or particles anymore.
