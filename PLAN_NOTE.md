@@ -12,10 +12,10 @@
 ## 1. Executive Summary & Purpose
 
 This document serves as the **single-source handoff note** requested by Vishnupriyan to continue development seamlessly on his laptop. It captures:
-1. **Database Backup & Migration State:** How to start fresh on the laptop with a complete, reproducible database.
-2. **Current Working Tree:** What has been completed up to commit `b70b0f6`.
-3. **Plan A (Next to implement):** About column spacing fix, deduplicating Education, adding the new **Career Focus** section, and the expandable **Dive Deeper** drawer.
-4. **Plan B (Queued):** 3D Character Playground replacing the Dev Lab with 5 switchable animated GLTF heroes (Robot, Soldier, Xbot, Fox, Flamingo).
+1. **Database Backup & Migration State:** How to start fresh on the laptop with a complete, reproducible database. (✅ Completed)
+2. **Current Working Tree:** What has been completed up to commit `5ec9e72`. (✅ Complete & Synced)
+3. **Plan A (Completed):** About column spacing fix, deduplicating Education, adding the new **Career Focus** section, and the expandable **Dive Deeper** drawer. (✅ Shipped in commit `73e57fe`)
+4. **Plan B (Completed):** 3D Character Playground replacing the Dev Lab with 5 switchable animated GLTF heroes (Robot, Soldier, Xbot, Fox, Flamingo). (✅ Shipped in commit `5ec9e72`)
 
 ---
 

@@ -23,6 +23,8 @@
 | **8** | Performance / accessibility / SEO: lazy loading, sitemap.xml, cursor fix, debug flag, `.env` guidance | ⬜ Not started | |
 | **9** | Testing checklist + InfinityFree deployment + live verification | ⬜ Not started | |
 | **10** | **Editorial-light full UI reset** (reference-driven): static pill header, light hero w/ B&W portrait, all sections restyled, theme engine removed | ✅ **Complete** | Report below |
+| **11** | **Plan A: About Spacing & Career Focus**: 3rd paragraph, deduplicate education, 8 tech pills, Career Focus section with expandable 'Dive Deeper' accordion drawer | ✅ **Complete** | Shipped in commit `73e57fe` |
+| **12** | **Plan B: 3D Character Playground**: Replaced Dev Lab with Three.js 3D viewport featuring 5 animated hero models (Robot, Soldier, Xbot, Fox, Flamingo), orbit drag, auto-spin, and raycasting | ✅ **Complete** | Shipped in commit `5ec9e72` |
 
 ---
 
