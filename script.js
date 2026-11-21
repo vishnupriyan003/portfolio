@@ -8,7 +8,7 @@ const preloader = document.getElementById("preloader");
 const cursorDot = document.querySelector(".cursor-dot");
 const cursorRing = document.querySelector(".cursor-ring");
 const animatedItems = document.querySelectorAll(
-  ".content-band, .split-section, .education-section, .certificates-section, .details-section, .resume-section, .contact-form-section, .info-card, .timeline-item, .education-grid article, .certificate-card, .certificate-note, .details-grid article, .resume-preview-images img"
+  ".content-band, .split-section, .education-section, .certificates-section, .details-section, .resume-section, .contact-form-section, .info-card, .timeline-item, .project-points span, .project-list article, .education-grid article, .certificate-card, .certificate-note, .details-grid article, .resume-preview-images img"
 );
 
 document.body.classList.add("is-loaded");

@@ -69,6 +69,7 @@
       <a href="#about" class="nav-link">About</a>
       <a href="#skills" class="nav-link">Skills</a>
       <a href="#experience" class="nav-link">Experience</a>
+      <a href="#projects" class="nav-link">Projects</a>
       <a href="#devlab" class="nav-link">Dev Lab</a>
       <a href="#contact" class="nav-link">Contact</a>
     </nav>
@@ -219,6 +220,39 @@
               <p class="timeline-company">{{ $item['company'] }}</p>
               <p>{{ $item['text'] }}</p>
             </div>
+          </article>
+        @endforeach
+      </div>
+    </section>
+
+    <section id="projects" class="section section-card content-band">
+      <div class="section-heading">
+        <p class="eyebrow">Featured Project</p>
+        <h2>{{ $content['project_title'] }}</h2>
+      </div>
+
+      <div class="project-showcase">
+        <div class="project-copy">
+          <p>{{ $content['project_description'] }}</p>
+          <div class="tag-list" aria-label="Project technologies">
+            @foreach ($content['project_tags'] as $tag)
+              <span>{{ $tag }}</span>
+            @endforeach
+          </div>
+        </div>
+        <div class="project-points">
+          @foreach ($content['project_points'] as $point)
+            <span><x-icon name="check" /> {{ $point }}</span>
+          @endforeach
+        </div>
+      </div>
+
+      <div class="project-list" aria-label="Additional resume projects">
+        @foreach ($content['additional_projects'] as $project)
+          <article>
+            <h3>{{ $project['title'] }}</h3>
+            <p>{{ $project['text'] }}</p>
+            <span>{{ $project['tags'] }}</span>
           </article>
         @endforeach
       </div>
