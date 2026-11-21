@@ -202,486 +202,521 @@ if (rotator && !prefersReducedMotion.matches) {
 // Reduced motion: the rotator and reveals are gated above; nothing else to
 // animate — the light editorial hero has no video or particles anymore.
 
-// ── Dev Lab: tabs, filters, snippet copy + Bug Hunter arcade ────────────
+// ── 3D Character Playground (Three.js WebGL Engine) ─────────────────────
 (() => {
-  const devlab = document.getElementById("devlab");
-  if (!devlab) {
+  const section = document.getElementById("playground");
+  const canvas = document.getElementById("playgroundCanvas");
+  const wrapper = document.getElementById("canvasWrapper");
+  const loadingEl = document.getElementById("playgroundLoading");
+  const loadingText = document.getElementById("loadingHeroText");
+  const statusText = document.getElementById("heroStatusText");
+  const chipButtons = document.querySelectorAll(".hero-chip");
+  const actionButtons = document.querySelectorAll(".action-btn");
+  const specialBtn = document.getElementById("specialActionBtn");
+
+  if (!section || !canvas || !wrapper || typeof window.THREE === "undefined") {
     return;
   }
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
-    .matches;
+  // ── Hero definitions & configurations ──
+  const HERO_CONFIG = {
+    robot: {
+      name: "Robot",
+      url: "assets/models/robot.glb",
+      scale: 0.85,
+      yOffset: -1.05,
+      cameraDist: 3.6,
+      specialLabel: "⚡ Dance",
+      actions: {
+        idle: ["Idle", "Standing"],
+        walk: ["Walking"],
+        run: ["Running"],
+        action: ["Dance", "Jump"]
+      }
+    },
+    soldier: {
+      name: "Soldier",
+      url: "assets/models/soldier.glb",
+      scale: 1.3,
+      yOffset: -1.3,
+      cameraDist: 3.5,
+      specialLabel: "⚡ Action",
+      actions: {
+        idle: ["Idle"],
+        walk: ["Walk"],
+        run: ["Run"],
+        action: ["TPose", "Run"]
+      }
+    },
+    xbot: {
+      name: "Xbot",
+      url: "assets/models/xbot.glb",
+      scale: 1.3,
+      yOffset: -1.3,
+      cameraDist: 3.5,
+      specialLabel: "⚡ Agree",
+      actions: {
+        idle: ["idle"],
+        walk: ["walk"],
+        run: ["run"],
+        action: ["agree", "headShake"]
+      }
+    },
+    fox: {
+      name: "Fox",
+      url: "assets/models/fox.glb",
+      scale: 0.019,
+      yOffset: -0.9,
+      cameraDist: 3.2,
+      specialLabel: "⚡ Prowl",
+      actions: {
+        idle: ["Survey"],
+        walk: ["Walk"],
+        run: ["Run"],
+        action: ["Run", "Survey"]
+      }
+    },
+    flamingo: {
+      name: "Flamingo",
+      url: "assets/models/flamingo.glb",
+      scale: 0.02,
+      yOffset: 0.2,
+      cameraDist: 3.8,
+      specialLabel: "⚡ Flight",
+      actions: {
+        idle: [0],
+        walk: [0],
+        run: [0],
+        action: [0]
+      }
+    }
+  };
 
-  /* ── Mode tabs (Pro Tricks ⇄ Bug Hunter Arcade) ─────────────────── */
-  const tabButtons = devlab.querySelectorAll(".devlab-tab-btn");
+  // ── Three.js Scene Variables ──
+  let scene, camera, renderer, clock, mixer;
+  let currentModel = null;
+  let activeHeroKey = "robot";
+  let activeActionType = "idle";
+  let currentAnimationAction = null;
+  let animationActions = {};
+  let modelAnimations = [];
+  let isInitialized = false;
+  let isVisible = false;
+  let rafId = null;
 
-  tabButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      tabButtons.forEach((other) => {
-        const isActive = other === button;
-        other.classList.toggle("is-active", isActive);
-        other.setAttribute("aria-selected", String(isActive));
+  // ── Orbit Camera & Interaction State ──
+  let isDragging = false;
+  let pointerStartX = 0;
+  let pointerStartY = 0;
+  let targetTheta = 0;
+  let targetPhi = Math.PI / 2.3;
+  let currentTheta = 0;
+  let currentPhi = Math.PI / 2.3;
+  let targetRadius = 3.6;
+  let currentRadius = 3.6;
+  let lastUserInteraction = Date.now();
+  const raycaster = new THREE.Raycaster();
+  const mouseVec = new THREE.Vector2();
 
-        const panel = document.getElementById(other.getAttribute("aria-controls"));
-        if (panel) {
-          panel.classList.toggle("is-active", isActive);
-        }
-      });
+  function initScene() {
+    clock = new THREE.Clock();
+    scene = new THREE.Scene();
+
+    const width = wrapper.clientWidth || 800;
+    const height = wrapper.clientHeight || 540;
+
+    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+    updateCameraPosition();
+
+    renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: "high-performance"
     });
-  });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(width, height);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    if (renderer.outputEncoding) {
+      renderer.outputEncoding = THREE.sRGBEncoding;
+    }
 
-  /* ── Category filters ───────────────────────────────────────────── */
-  const filterPills = devlab.querySelectorAll(".filter-pill");
-  const tipCards = devlab.querySelectorAll(".tip-card");
+    // ── Lighting ──
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xe2dac9, 1.0);
+    hemiLight.position.set(0, 20, 0);
+    scene.add(hemiLight);
 
-  filterPills.forEach((pill) => {
-    pill.addEventListener("click", () => {
-      const filter = pill.dataset.filter;
+    const dirLight = new THREE.DirectionalLight(0xfff5e6, 1.25);
+    dirLight.position.set(4, 8, 5);
+    dirLight.castShadow = true;
+    dirLight.shadow.mapSize.width = 1024;
+    dirLight.shadow.mapSize.height = 1024;
+    dirLight.shadow.camera.near = 0.5;
+    dirLight.shadow.camera.far = 25;
+    dirLight.shadow.camera.left = -3;
+    dirLight.shadow.camera.right = 3;
+    dirLight.shadow.camera.top = 3;
+    dirLight.shadow.camera.bottom = -3;
+    dirLight.shadow.bias = -0.001;
+    scene.add(dirLight);
 
-      filterPills.forEach((item) => item.classList.toggle("is-active", item === pill));
-      tipCards.forEach((card) => {
-        const visible = filter === "all" || card.dataset.category === filter;
-        card.classList.toggle("is-filtered-out", !visible);
-      });
+    const fillLight = new THREE.DirectionalLight(0xcde6ff, 0.45);
+    fillLight.position.set(-4, 3, -3);
+    scene.add(fillLight);
+
+    // ── Soft Contact Shadow Floor Plane ──
+    const floorGeo = new THREE.PlaneGeometry(16, 16);
+    const floorMat = new THREE.ShadowMaterial({ opacity: 0.16 });
+    const floor = new THREE.Mesh(floorGeo, floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -1.1;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    attachEvents();
+    loadHero("robot");
+  }
+
+  function updateCameraPosition() {
+    currentTheta += (targetTheta - currentTheta) * 0.08;
+    currentPhi += (targetPhi - currentPhi) * 0.08;
+    currentRadius += (targetRadius - currentRadius) * 0.08;
+
+    // Constrain phi so camera cannot flip upside down
+    currentPhi = Math.max(0.15, Math.min(Math.PI / 2 - 0.05, currentPhi));
+
+    camera.position.x = currentRadius * Math.sin(currentPhi) * Math.sin(currentTheta);
+    camera.position.y = currentRadius * Math.cos(currentPhi);
+    camera.position.z = currentRadius * Math.sin(currentPhi) * Math.cos(currentTheta);
+    camera.lookAt(0, 0, 0);
+  }
+
+  // ── Model Loader ──
+  const modelCache = {};
+  const loader = new THREE.GLTFLoader();
+
+  function loadHero(heroKey) {
+    const config = HERO_CONFIG[heroKey];
+    if (!config) return;
+
+    activeHeroKey = heroKey;
+    showLoading(`Loading ${config.name}...`);
+
+    // Update hero chips UI
+    chipButtons.forEach((btn) => {
+      const isActive = btn.dataset.hero === heroKey;
+      btn.classList.toggle("is-active", isActive);
+      btn.setAttribute("aria-pressed", String(isActive));
     });
-  });
 
-  /* ── Snippet copy buttons ───────────────────────────────────────── */
-  async function copyText(text) {
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(text);
+    // Update Special Action button label
+    if (specialBtn) {
+      specialBtn.querySelector("span").textContent = config.specialLabel;
+    }
+
+    targetRadius = config.cameraDist;
+
+    if (modelCache[heroKey]) {
+      setupModel(modelCache[heroKey], config);
+      hideLoading();
       return;
     }
 
-    const helper = document.createElement("textarea");
-    helper.value = text;
-    helper.setAttribute("readonly", "");
-    helper.style.position = "fixed";
-    helper.style.opacity = "0";
-    document.body.appendChild(helper);
-    helper.select();
-    document.execCommand("copy");
-    helper.remove();
+    loader.load(
+      config.url,
+      (gltf) => {
+        modelCache[heroKey] = gltf;
+        setupModel(gltf, config);
+        hideLoading();
+      },
+      undefined,
+      (err) => {
+        console.warn("Failed to load 3D hero:", heroKey, err);
+        hideLoading();
+      }
+    );
   }
 
-  devlab.querySelectorAll(".copy-snippet-btn").forEach((button) => {
-    button.addEventListener("click", async () => {
-      const card = button.closest(".tip-card");
-      const code = card ? card.querySelector("pre code") : null;
-      const label = button.querySelector(".copy-label");
+  function setupModel(gltf, config) {
+    if (currentModel) {
+      scene.remove(currentModel);
+    }
+    if (mixer) {
+      mixer.stopAllAction();
+    }
 
-      if (!code) {
-        return;
+    // Clone scene for multiple usages if cached
+    const root = gltf.scene || gltf.scenes[0];
+    currentModel = root;
+    currentModel.scale.setScalar(config.scale);
+    currentModel.position.set(0, config.yOffset, 0);
+
+    currentModel.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
       }
+    });
 
-      try {
-        await copyText(code.innerText);
+    scene.add(currentModel);
 
-        if (label) {
-          label.textContent = "Copied!";
+    // Setup Animation Mixer
+    modelAnimations = gltf.animations || [];
+    mixer = new THREE.AnimationMixer(currentModel);
+    animationActions = {};
+
+    modelAnimations.forEach((clip) => {
+      animationActions[clip.name] = mixer.clipAction(clip);
+    });
+
+    // Reset action state to Idle
+    setActiveAction("idle");
+  }
+
+  function findClipForAction(actionType) {
+    const config = HERO_CONFIG[activeHeroKey];
+    if (!config || !modelAnimations.length) return null;
+
+    const candidates = config.actions[actionType] || [];
+
+    // If candidate is a number index (like Flamingo)
+    if (typeof candidates[0] === "number" && modelAnimations[candidates[0]]) {
+      return modelAnimations[candidates[0]];
+    }
+
+    for (const name of candidates) {
+      const found = modelAnimations.find(
+        (clip) => clip.name.toLowerCase() === String(name).toLowerCase()
+      );
+      if (found) return found;
+    }
+
+    // Fallback: first available animation clip
+    return modelAnimations[0] || null;
+  }
+
+  function setActiveAction(actionType) {
+    activeActionType = actionType;
+
+    // Update HUD Action Buttons UI
+    actionButtons.forEach((btn) => {
+      const isMatch = btn.dataset.action === actionType;
+      btn.classList.toggle("is-active", isMatch);
+    });
+
+    // Update Status Badge Text
+    if (statusText) {
+      const labels = {
+        idle: "Idle",
+        walk: "Walking",
+        run: "Running",
+        action: HERO_CONFIG[activeHeroKey]?.specialLabel || "Action"
+      };
+      statusText.textContent = labels[actionType] || "Active";
+    }
+
+    if (!mixer) return;
+
+    const clip = findClipForAction(actionType);
+    if (!clip) return;
+
+    const newAction = mixer.clipAction(clip);
+
+    if (currentAnimationAction && currentAnimationAction !== newAction) {
+      currentAnimationAction.fadeOut(0.28);
+    }
+
+    newAction.reset().fadeIn(0.28).play();
+    currentAnimationAction = newAction;
+  }
+
+  function showLoading(msg) {
+    if (loadingText) loadingText.textContent = msg;
+    if (loadingEl) loadingEl.classList.remove("is-hidden");
+  }
+
+  function hideLoading() {
+    if (loadingEl) loadingEl.classList.add("is-hidden");
+  }
+
+  // ── Animation Loop ──
+  function tick() {
+    if (!isVisible) {
+      rafId = null;
+      return;
+    }
+
+    const delta = clock.getDelta();
+
+    // Inactivity Auto-spin (after 4s)
+    if (Date.now() - lastUserInteraction > 4000 && !isDragging) {
+      targetTheta += 0.005;
+    }
+
+    updateCameraPosition();
+
+    if (mixer) {
+      mixer.update(delta);
+    }
+
+    renderer.render(scene, camera);
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function startLoop() {
+    if (!rafId && isVisible) {
+      clock.start();
+      rafId = requestAnimationFrame(tick);
+    }
+  }
+
+  function stopLoop() {
+    if (rafId) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  }
+
+  // ── Pointer & Orbit Drag Events ──
+  function attachEvents() {
+    // Hero chip switching
+    chipButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const heroKey = btn.dataset.hero;
+        if (heroKey && heroKey !== activeHeroKey) {
+          loadHero(heroKey);
+          lastUserInteraction = Date.now();
         }
-        button.classList.add("is-copied");
+      });
+    });
 
-        window.setTimeout(() => {
-          if (label) {
-            label.textContent = "Copy";
+    // Action pill switching
+    actionButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const action = btn.dataset.action;
+        if (action) {
+          setActiveAction(action);
+          lastUserInteraction = Date.now();
+        }
+      });
+    });
+
+    // Mouse Drag on canvas
+    wrapper.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      pointerStartX = e.clientX;
+      pointerStartY = e.clientY;
+      lastUserInteraction = Date.now();
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - pointerStartX;
+      const dy = e.clientY - pointerStartY;
+      pointerStartX = e.clientX;
+      pointerStartY = e.clientY;
+
+      targetTheta -= dx * 0.008;
+      targetPhi -= dy * 0.008;
+      lastUserInteraction = Date.now();
+    });
+
+    window.addEventListener("mouseup", (e) => {
+      if (isDragging) {
+        isDragging = false;
+        lastUserInteraction = Date.now();
+      }
+    });
+
+    // Click on character to trigger action animation
+    wrapper.addEventListener("click", (e) => {
+      if (!currentModel || !camera) return;
+
+      const rect = canvas.getBoundingClientRect();
+      mouseVec.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouseVec.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouseVec, camera);
+      const intersects = raycaster.intersectObjects(currentModel.children, true);
+
+      if (intersects.length > 0) {
+        // Toggle action on click
+        const nextAction = activeActionType === "action" ? "idle" : "action";
+        setActiveAction(nextAction);
+        lastUserInteraction = Date.now();
+      }
+    });
+
+    // Touch Drag on mobile
+    wrapper.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        pointerStartX = e.touches[0].clientX;
+        pointerStartY = e.touches[0].clientY;
+        lastUserInteraction = Date.now();
+      }
+    }, { passive: true });
+
+    window.addEventListener("touchmove", (e) => {
+      if (!isDragging || e.touches.length !== 1) return;
+      const dx = e.touches[0].clientX - pointerStartX;
+      const dy = e.touches[0].clientY - pointerStartY;
+      pointerStartX = e.touches[0].clientX;
+      pointerStartY = e.touches[0].clientY;
+
+      targetTheta -= dx * 0.01;
+      targetPhi -= dy * 0.01;
+      lastUserInteraction = Date.now();
+    }, { passive: true });
+
+    window.addEventListener("touchend", () => {
+      isDragging = false;
+      lastUserInteraction = Date.now();
+    });
+
+    // Zoom on wheel
+    wrapper.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      targetRadius = Math.max(2.0, Math.min(6.0, targetRadius + e.deltaY * 0.003));
+      lastUserInteraction = Date.now();
+    }, { passive: false });
+
+    // Window Resize
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (!renderer || !camera || !wrapper) return;
+        const width = wrapper.clientWidth;
+        const height = wrapper.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      }, 150);
+    });
+  }
+
+  // ── IntersectionObserver: Lazy load and pause when offscreen ──
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible) {
+          if (!isInitialized) {
+            isInitialized = true;
+            initScene();
           }
-          button.classList.remove("is-copied");
-        }, 1500);
-      } catch (error) {
-        if (label) {
-          label.textContent = "Retry";
+          startLoop();
+        } else {
+          stopLoop();
         }
-      }
-    });
-  });
-
-  /* ── Bug Hunter arcade ──────────────────────────────────────────── */
-  const grid = document.getElementById("arcadeGrid");
-  const startOverlay = document.getElementById("arcadeStartOverlay");
-  const gameOverOverlay = document.getElementById("arcadeGameOverOverlay");
-  const startButton = document.getElementById("startGameBtn");
-  const restartButton = document.getElementById("restartGameBtn");
-
-  if (!grid || !startOverlay || !gameOverOverlay || !startButton || !restartButton) {
-    return;
-  }
-
-  const cells = Array.from(grid.querySelectorAll(".code-cell"));
-  const scoreEl = document.getElementById("gameScore");
-  const comboEl = document.getElementById("gameCombo");
-  const timeEl = document.getElementById("gameTime");
-  const bestEl = document.getElementById("gameHighScore");
-  const timerBar = document.getElementById("timerProgress");
-  const audioToggle = document.getElementById("gameAudioToggle");
-  const audioIconOn = document.getElementById("audioIconOn");
-  const audioIconOff = document.getElementById("audioIconOff");
-
-  const BEST_KEY = "bugHunterBest";
-  const MUTE_KEY = "bugHunterMuted";
-  const ROUND_MS = 25000;
-  const MAX_COMBO = 5;
-  const HIT_POINTS = 10;
-
-  let score = 0;
-  let combo = 1;
-  let maxCombo = 1;
-  let squashed = 0;
-  let best = 0;
-  let muted = false;
-  let running = false;
-  let startedAt = 0;
-  let remaining = ROUND_MS;
-  let rafId = 0;
-  let spawnTimer = 0;
-  let bugTimer = 0;
-  let roundTimer = 0;
-  let activeBug = null;
-  let audioContext = null;
-
-  function readStore(key, fallback) {
-    try {
-      const value = window.localStorage.getItem(key);
-      return value === null ? fallback : value;
-    } catch (error) {
-      return fallback;
-    }
-  }
-
-  function writeStore(key, value) {
-    try {
-      window.localStorage.setItem(key, value);
-    } catch (error) {
-      /* storage unavailable — session-only state is fine */
-    }
-  }
-
-  best = parseInt(readStore(BEST_KEY, "0"), 10) || 0;
-  muted = readStore(MUTE_KEY, "0") === "1";
-
-  function syncAudioUI() {
-    if (audioIconOn) audioIconOn.classList.toggle("is-hidden", muted);
-    if (audioIconOff) audioIconOff.classList.toggle("is-hidden", !muted);
-  }
-
-  syncAudioUI();
-  render();
-
-  function beep(frequency, duration, type = "square") {
-    if (muted) {
-      return;
-    }
-
-    try {
-      const AudioCtor = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtor) return;
-
-      audioContext = audioContext || new AudioCtor();
-      if (audioContext.state === "suspended") {
-        audioContext.resume();
-      }
-
-      const oscillator = audioContext.createOscillator();
-      const gain = audioContext.createGain();
-      const now = audioContext.currentTime;
-
-      oscillator.type = type;
-      oscillator.frequency.setValueAtTime(frequency, now);
-      gain.gain.setValueAtTime(0.05, now);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-
-      oscillator.connect(gain);
-      gain.connect(audioContext.destination);
-      oscillator.start(now);
-      oscillator.stop(now + duration);
-    } catch (error) {
-      /* audio is a nicety — never break the game for it */
-    }
-  }
-
-  if (audioToggle) {
-    audioToggle.addEventListener("click", () => {
-      muted = !muted;
-      writeStore(MUTE_KEY, muted ? "1" : "0");
-      syncAudioUI();
-      beep(660, 0.07, "sine");
-    });
-  }
-
-  function render() {
-    if (scoreEl) scoreEl.textContent = String(score);
-    if (comboEl) comboEl.textContent = `x${combo}`;
-    if (timeEl) timeEl.textContent = `${Math.ceil(remaining / 1000)}s`;
-    if (bestEl) bestEl.textContent = String(best);
-    if (timerBar) timerBar.style.width = `${(remaining / ROUND_MS) * 100}%`;
-  }
-
-  function clearBugs() {
-    window.clearTimeout(bugTimer);
-    window.clearTimeout(spawnTimer);
-    bugTimer = 0;
-    spawnTimer = 0;
-
-    if (activeBug) {
-      const cell = activeBug.closest(".code-cell");
-      activeBug.remove();
-      activeBug = null;
-      if (cell) cell.classList.remove("is-live");
-    }
-
-    grid.querySelectorAll(".bug").forEach((bug) => bug.remove());
-    grid.querySelectorAll(".code-cell.is-live").forEach((cell) => cell.classList.remove("is-live"));
-    grid.querySelectorAll(".score-floater").forEach((floater) => floater.remove());
-  }
-
-  function nextSpawnDelay() {
-    const elapsed = ROUND_MS - remaining;
-    return Math.max(320, 760 - elapsed / 45) + Math.random() * 220;
-  }
-
-  function scheduleSpawn(delay) {
-    window.clearTimeout(spawnTimer);
-    spawnTimer = window.setTimeout(() => {
-      spawnBug();
-      if (running) {
-        scheduleSpawn(nextSpawnDelay());
-      }
-    }, delay);
-  }
-
-  function spawnBug() {
-    if (!running || activeBug) {
-      return;
-    }
-
-    const freeCells = cells.filter((cell) => !cell.classList.contains("is-live"));
-    if (!freeCells.length) {
-      return;
-    }
-
-    const cell = freeCells[Math.floor(Math.random() * freeCells.length)];
-    const target = cell.querySelector(".bug-target");
-    if (!target) {
-      return;
-    }
-
-    const bug = document.createElement("button");
-    bug.type = "button";
-    bug.className = "bug";
-    bug.textContent = "🐞";
-    bug.setAttribute("aria-label", "Squash bug");
-
-    if (document.body.classList.contains("has-custom-cursor")) {
-      const ring = document.querySelector(".cursor-ring");
-      if (ring) {
-        bug.addEventListener("mouseenter", () => ring.classList.add("is-active"));
-        bug.addEventListener("mouseleave", () => ring.classList.remove("is-active"));
-      }
-    }
-
-    target.appendChild(bug);
-    cell.classList.add("is-live");
-    activeBug = bug;
-
-    const life = reduceMotion ? 1600 : Math.max(760, 1250 - (ROUND_MS - remaining) / 45);
-    bugTimer = window.setTimeout(() => missBug(), life);
-
-    bug.addEventListener("click", (event) => {
-      event.stopPropagation();
-      squashBug(bug, cell);
-    });
-  }
-
-  function removeBug(bug, cell) {
-    window.clearTimeout(bugTimer);
-    bugTimer = 0;
-
-    if (bug) bug.remove();
-    if (cell) cell.classList.remove("is-live");
-
-    if (activeBug === bug) {
-      activeBug = null;
-    }
-  }
-
-  function addFloater(cell, text) {
-    const floater = document.createElement("span");
-    floater.className = "score-floater";
-    floater.textContent = text;
-    cell.appendChild(floater);
-    window.setTimeout(() => floater.remove(), 700);
-  }
-
-  function squashBug(bug, cell) {
-    if (!running || activeBug !== bug) {
-      return;
-    }
-
-    const gained = HIT_POINTS * combo;
-    score += gained;
-    squashed += 1;
-    combo = Math.min(MAX_COMBO, combo + 1);
-    maxCombo = Math.max(maxCombo, combo);
-
-    removeBug(bug, cell);
-    addFloater(cell, `+${gained}`);
-    beep(760 + combo * 90, 0.07);
-    render();
-  }
-
-  function missBug() {
-    if (!running) {
-      return;
-    }
-
-    if (combo > 1) {
-      combo = 1;
-      beep(220, 0.12, "sawtooth");
-    }
-
-    removeBug(activeBug, activeBug ? activeBug.closest(".code-cell") : null);
-    render();
-  }
-
-  // Clicking empty code (not a bug) breaks the combo — rewards clean aim.
-  grid.addEventListener("click", (event) => {
-    if (!running || event.target.closest(".bug")) {
-      return;
-    }
-
-    if (combo > 1) {
-      combo = 1;
-      beep(220, 0.1, "sawtooth");
-      render();
-    }
-  });
-
-  function rankFor(value) {
-    if (value >= 320) return { title: "Principal Bug Slayer", emoji: "👑" };
-    if (value >= 180) return { title: "Senior Problem Solver", emoji: "🏆" };
-    if (value >= 90) return { title: "Mid-Level Debugger", emoji: "🐞" };
-    return { title: "Junior Intern", emoji: "🐣" };
-  }
-
-  function tick(now) {
-    if (!running) {
-      return;
-    }
-
-    remaining = Math.max(0, ROUND_MS - (now - startedAt));
-
-    if (remaining <= 0) {
-      endGame();
-      return;
-    }
-
-    render();
-    rafId = window.requestAnimationFrame(tick);
-  }
-
-  function startGame() {
-    score = 0;
-    combo = 1;
-    maxCombo = 1;
-    squashed = 0;
-    remaining = ROUND_MS;
-    running = false;
-
-    window.clearTimeout(roundTimer);
-    roundTimer = 0;
-
-    if (timerBar) {
-      timerBar.classList.add("is-resetting");
-    }
-
-    clearBugs();
-    render();
-
-    if (timerBar) {
-      window.setTimeout(() => timerBar && timerBar.classList.remove("is-resetting"), 420);
-    }
-
-    startOverlay.classList.add("is-hidden");
-    gameOverOverlay.classList.add("is-hidden");
-
-    // Let the timer bar refill before the sprint clock starts.
-    roundTimer = window.setTimeout(() => {
-      roundTimer = 0;
-      running = true;
-      startedAt = window.performance.now();
-      rafId = window.requestAnimationFrame(tick);
-      scheduleSpawn(420);
-      beep(520, 0.08, "sine");
-    }, 380);
-  }
-
-  function endGame() {
-    if (!running) {
-      return;
-    }
-
-    running = false;
-    remaining = 0;
-
-    window.cancelAnimationFrame(rafId);
-    window.clearTimeout(roundTimer);
-    clearBugs();
-
-    if (timerBar) {
-      timerBar.classList.add("is-resetting");
-    }
-
-    render();
-
-    if (timerBar) {
-      window.setTimeout(() => timerBar && timerBar.classList.remove("is-resetting"), 420);
-    }
-
-    if (score > best) {
-      best = score;
-      writeStore(BEST_KEY, String(best));
-      if (bestEl) bestEl.textContent = String(best);
-    }
-
-    const rank = rankFor(score);
-    const title = document.getElementById("gameOverRankTitle");
-    const emoji = document.getElementById("gameOverEmoji");
-    const finalScore = document.getElementById("finalScoreVal");
-    const finalSquashed = document.getElementById("finalSquashedVal");
-    const finalCombo = document.getElementById("finalComboVal");
-
-    if (title) title.textContent = rank.title;
-    if (emoji) emoji.textContent = rank.emoji;
-    if (finalScore) finalScore.textContent = String(score);
-    if (finalSquashed) finalSquashed.textContent = `${squashed} bugs`;
-    if (finalCombo) finalCombo.textContent = `x${maxCombo}`;
-
-    gameOverOverlay.classList.remove("is-hidden");
-    beep(392, 0.12, "sine");
-    window.setTimeout(() => beep(523, 0.12, "sine"), 140);
-    window.setTimeout(() => beep(659, 0.18, "sine"), 280);
-  }
-
-  startButton.addEventListener("click", startGame);
-  restartButton.addEventListener("click", startGame);
-
-  // Leaving the tab mid-round ends the sprint (no silent timers in background).
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden) {
-      return;
-    }
-
-    if (running) {
-      endGame();
-      return;
-    }
-
-    if (roundTimer) {
-      window.clearTimeout(roundTimer);
-      roundTimer = 0;
-      startOverlay.classList.remove("is-hidden");
-    }
-  });
+      });
+    },
+    { rootMargin: "150px" }
+  );
+
+  observer.observe(section);
 })();
 
 // ── Career Focus Drawer Toggle ─────────────────────────────────────────
