@@ -213,6 +213,8 @@ if (rotator && !prefersReducedMotion.matches) {
   const chipButtons = document.querySelectorAll(".hero-chip");
   const actionButtons = document.querySelectorAll(".action-btn");
   const specialBtn = document.getElementById("specialActionBtn");
+  const actionPills = document.getElementById("actionPills");
+  const hintText = document.querySelector(".playground-hint span");
 
   if (!section || !canvas || !wrapper || typeof window.THREE === "undefined") {
     return;
@@ -282,13 +284,9 @@ if (rotator && !prefersReducedMotion.matches) {
       scale: 0.02,
       yOffset: 0.2,
       cameraDist: 3.8,
-      specialLabel: "⚡ Flight",
-      actions: {
-        idle: [0],
-        walk: [0],
-        run: [0],
-        action: [0]
-      }
+      isLoopOnly: true,
+      statusLabel: "Flying Loop",
+      actions: {}
     }
   };
 
@@ -410,9 +408,17 @@ if (rotator && !prefersReducedMotion.matches) {
       btn.setAttribute("aria-pressed", String(isActive));
     });
 
-    // Update Special Action button label
-    if (specialBtn) {
+    // Update Special Action button label & Action pills visibility
+    if (specialBtn && config.specialLabel) {
       specialBtn.querySelector("span").textContent = config.specialLabel;
+    }
+    if (actionPills) {
+      actionPills.style.display = config.isLoopOnly ? "none" : "";
+    }
+    if (hintText) {
+      hintText.textContent = config.isLoopOnly
+        ? "Drag to orbit · Scroll to zoom · Continuous flying loop"
+        : "Drag to orbit · Scroll to zoom · Click character for action move";
     }
 
     targetRadius = config.cameraDist;
@@ -470,8 +476,19 @@ if (rotator && !prefersReducedMotion.matches) {
       animationActions[clip.name] = mixer.clipAction(clip);
     });
 
-    // Reset action state to Idle
-    setActiveAction("idle");
+    // Play loop for loop-only models (e.g. Flamingo flying loop) or reset to Idle
+    if (config.isLoopOnly) {
+      if (modelAnimations.length > 0) {
+        const loopAction = mixer.clipAction(modelAnimations[0]);
+        loopAction.play();
+        currentAnimationAction = loopAction;
+      }
+      if (statusText) {
+        statusText.textContent = config.statusLabel || "Flying Loop";
+      }
+    } else {
+      setActiveAction("idle");
+    }
   }
 
   function findClipForAction(actionType) {
@@ -641,6 +658,7 @@ if (rotator && !prefersReducedMotion.matches) {
       const intersects = raycaster.intersectObjects(currentModel.children, true);
 
       if (intersects.length > 0) {
+        if (HERO_CONFIG[activeHeroKey]?.isLoopOnly) return;
         // Toggle action on click
         const nextAction = activeActionType === "action" ? "idle" : "action";
         setActiveAction(nextAction);
