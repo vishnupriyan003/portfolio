@@ -794,7 +794,6 @@ body.is-loaded .site-header {
 }
 
 .info-card p,
-.project-copy p,
 .timeline-content p,
 .education-grid p {
   color: var(--muted);
@@ -871,81 +870,12 @@ body.is-loaded .site-header {
   color: var(--ink);
 }
 
-/* ── Projects ─────────────────────────────────────────────────────── */
-.project-showcase {
-  display: grid;
-  grid-template-columns: 1fr 0.85fr;
-  gap: 28px;
-  align-items: start;
-}
-
-.project-copy p {
-  font-size: 16.5px;
-  line-height: 1.8;
-}
-
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.tag-list span {
-  padding: 8px 15px;
-  border: 1px solid var(--line);
-  border-radius: var(--pill);
-  background: var(--bg);
-  color: var(--ink);
-  font-size: 13.5px;
-  font-weight: 600;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.tag-list span:hover {
-  background: var(--green);
-  transform: translateY(-2px);
-}
-
-.project-points {
-  display: grid;
-  gap: 12px;
-}
-
-.project-points span {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 13px 16px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--bg-soft);
-  color: var(--ink);
-  font-size: 14.5px;
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.project-points span:hover {
-  background: var(--bg);
-  transform: translateX(4px);
-}
-
-.project-points .icon {
-  color: var(--green-ink);
-}
-
-.project-list,
 .details-grid {
   display: grid;
   gap: 18px;
   margin-top: 28px;
 }
 
-.project-list {
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
-.project-list article,
 .details-grid article,
 .certificate-note {
   padding: 24px;
@@ -956,33 +886,22 @@ body.is-loaded .site-header {
   transition: transform 0.24s ease, box-shadow 0.24s ease;
 }
 
-.project-list article:hover,
 .details-grid article:hover,
 .certificate-note:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
 }
 
-.project-list h3,
 .details-grid h3,
 .certificate-note h3 {
   margin-bottom: 10px;
   font-size: 18px;
 }
 
-.project-list p,
 .details-grid p,
 .certificate-note p {
   color: var(--muted);
   font-size: 15px;
-}
-
-.project-list span {
-  display: inline-flex;
-  margin-top: 14px;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--ink);
 }
 
 /* ── Education ────────────────────────────────────────────────────── */
@@ -1288,7 +1207,6 @@ body.is-loaded .site-header {
 }
 
 .timeline-item:nth-child(2),
-.project-list article:nth-child(2),
 .details-grid article:nth-child(2),
 .info-card:nth-child(2),
 .education-grid article:nth-child(2),
@@ -1297,7 +1215,6 @@ body.is-loaded .site-header {
 }
 
 .timeline-item:nth-child(3),
-.project-list article:nth-child(3),
 .details-grid article:nth-child(3),
 .info-card:nth-child(3),
 .education-grid article:nth-child(3),
@@ -2063,7 +1980,6 @@ body.has-custom-cursor .cursor-ring {
 /* ── Responsive ───────────────────────────────────────────────────── */
 @media (max-width: 980px) {
   .about-layout,
-  .project-showcase,
   .site-footer {
     grid-template-columns: 1fr;
   }

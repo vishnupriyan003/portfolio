@@ -8,7 +8,7 @@
   <meta name="author" content="Vishnupriyan ai">
   <meta name="robots" content="index, follow">
   <meta name="geo.region" content="IN-TN">
-  <meta name="geo.placename" content="Karur, Tamil Nadu">
+  <meta name="geo.placename" content="Karur, Tamil Nadu, India">
   <link rel="canonical" href="{{ url('/') }}">
   <meta property="og:type" content="profile">
   <meta property="og:title" content="{{ $content['seo_title'] }}">
@@ -69,7 +69,6 @@
       <a href="#about" class="nav-link">About</a>
       <a href="#skills" class="nav-link">Skills</a>
       <a href="#experience" class="nav-link">Experience</a>
-      <a href="#projects" class="nav-link">Projects</a>
       <a href="#devlab" class="nav-link">Dev Lab</a>
       <a href="#contact" class="nav-link">Contact</a>
     </nav>
@@ -83,10 +82,12 @@
     @php
       // Rotating designation phrases are derived only from existing content:
       // the role (split on "|") + SEO keywords that name a designation.
+      // Keyword phrases longer than 4 words are skipped so location-stuffed
+      // SEO phrases never leak into the hero as fake job titles.
       $designations = collect(preg_split('/\s*\|\s*/', trim($content['role'])))
           ->merge(collect(explode(',', $content['seo_keywords']))
               ->map(fn ($k) => trim($k))
-              ->filter(fn ($k) => $k !== '' && stripos($k, 'Developer') !== false && !str_ends_with($k, 'Karur')))
+              ->filter(fn ($k) => $k !== '' && stripos($k, 'Developer') !== false && !str_ends_with($k, 'Karur') && str_word_count($k) <= 4))
           ->filter()
           ->unique()
           ->values()
@@ -218,39 +219,6 @@
               <p class="timeline-company">{{ $item['company'] }}</p>
               <p>{{ $item['text'] }}</p>
             </div>
-          </article>
-        @endforeach
-      </div>
-    </section>
-
-    <section id="projects" class="section section-card content-band">
-      <div class="section-heading">
-        <p class="eyebrow">Featured Project</p>
-        <h2>{{ $content['project_title'] }}</h2>
-      </div>
-
-      <div class="project-showcase">
-        <div class="project-copy">
-          <p>{{ $content['project_description'] }}</p>
-          <div class="tag-list" aria-label="Project technologies">
-            @foreach ($content['project_tags'] as $tag)
-              <span>{{ $tag }}</span>
-            @endforeach
-          </div>
-        </div>
-        <div class="project-points">
-          @foreach ($content['project_points'] as $point)
-            <span><x-icon name="check" /> {{ $point }}</span>
-          @endforeach
-        </div>
-      </div>
-
-      <div class="project-list" aria-label="Additional resume projects">
-        @foreach ($content['additional_projects'] as $project)
-          <article>
-            <h3>{{ $project['title'] }}</h3>
-            <p>{{ $project['text'] }}</p>
-            <span>{{ $project['tags'] }}</span>
           </article>
         @endforeach
       </div>
