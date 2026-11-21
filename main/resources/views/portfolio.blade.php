@@ -385,13 +385,13 @@
           <span class="hero-chip-icon">🤖</span>
           <span class="hero-chip-name">Robot</span>
         </button>
-        <button type="button" class="hero-chip" data-hero="soldier" aria-pressed="false">
-          <span class="hero-chip-icon">🎖️</span>
-          <span class="hero-chip-name">Soldier</span>
+        <button type="button" class="hero-chip" data-hero="astronaut" aria-pressed="false">
+          <span class="hero-chip-icon">🧑‍🚀</span>
+          <span class="hero-chip-name">Astronaut</span>
         </button>
-        <button type="button" class="hero-chip" data-hero="xbot" aria-pressed="false">
-          <span class="hero-chip-icon">⚡</span>
-          <span class="hero-chip-name">Xbot</span>
+        <button type="button" class="hero-chip" data-hero="horse" aria-pressed="false">
+          <span class="hero-chip-icon">🐎</span>
+          <span class="hero-chip-name">Horse</span>
         </button>
         <button type="button" class="hero-chip" data-hero="fox" aria-pressed="false">
           <span class="hero-chip-icon">🦊</span>

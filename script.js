@@ -236,33 +236,26 @@ if (rotator && !prefersReducedMotion.matches) {
         action: ["Dance", "Jump"]
       }
     },
-    soldier: {
-      name: "Soldier",
-      url: "assets/models/soldier.glb",
+    astronaut: {
+      name: "Astronaut",
+      url: "assets/models/cesiumman.glb",
       scale: 1.3,
-      yOffset: -1.3,
+      yOffset: -1.05,
       cameraDist: 3.5,
-      specialLabel: "⚡ Action",
-      actions: {
-        idle: ["Idle"],
-        walk: ["Walk"],
-        run: ["Run"],
-        action: ["TPose", "Run"]
-      }
+      isLoopOnly: true,
+      statusLabel: "Spacewalk Loop",
+      actions: {}
     },
-    xbot: {
-      name: "Xbot",
-      url: "assets/models/xbot.glb",
-      scale: 1.3,
-      yOffset: -1.3,
-      cameraDist: 3.5,
-      specialLabel: "⚡ Agree",
-      actions: {
-        idle: ["idle"],
-        walk: ["walk"],
-        run: ["run"],
-        action: ["agree", "headShake"]
-      }
+    horse: {
+      name: "Horse",
+      url: "assets/models/horse.glb",
+      scale: 0.007,
+      yOffset: -0.65,
+      cameraDist: 4.5,
+      rotationY: Math.PI / 2,
+      isLoopOnly: true,
+      statusLabel: "Galloping Loop",
+      actions: {}
     },
     fox: {
       name: "Fox",
@@ -417,7 +410,7 @@ if (rotator && !prefersReducedMotion.matches) {
     }
     if (hintText) {
       hintText.textContent = config.isLoopOnly
-        ? "Drag to orbit · Scroll to zoom · Continuous flying loop"
+        ? `Drag to orbit · Scroll to zoom · Continuous ${config.statusLabel ? config.statusLabel.toLowerCase() : "loop"}`
         : "Drag to orbit · Scroll to zoom · Click character for action move";
     }
 
@@ -457,6 +450,7 @@ if (rotator && !prefersReducedMotion.matches) {
     currentModel = root;
     currentModel.scale.setScalar(config.scale);
     currentModel.position.set(0, config.yOffset, 0);
+    currentModel.rotation.y = config.rotationY || 0;
 
     currentModel.traverse((child) => {
       if (child.isMesh) {
@@ -484,7 +478,7 @@ if (rotator && !prefersReducedMotion.matches) {
         currentAnimationAction = loopAction;
       }
       if (statusText) {
-        statusText.textContent = config.statusLabel || "Flying Loop";
+        statusText.textContent = config.statusLabel || "Looping";
       }
     } else {
       setActiveAction("idle");

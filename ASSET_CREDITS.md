@@ -55,6 +55,21 @@ All files below already existed in the project. Phase 2 **recompressed them in p
 
 > Provenance note: the original `image/*` files were already in the project before this redesign; their upstream source is unknown. They are personal/portfolio content (skill graphics, resume-page previews, profile photo) used to represent the owner's own work. If any is later found to be third-party material, replace it with a licensed asset from the list above.
 
+
+## 3D Models (Character Playground, self-hosted in `assets/models/`)
+
+All models are stored locally in binary glTF format (`.glb`) and are 100% free with verified open-source permissive licenses. No external CDN calls are made.
+
+| Model | File | Size | Source | License | Origin | Notes |
+|-------|------|------|--------|---------|--------|-------|
+| 🤖 **Robot** | `assets/models/robot.glb` | 464 KB | Three.js official examples (`RobotExpressive.glb`) | MIT License / CC-BY (Three.js authors) | Downloaded 2026-11-21 | Skeletal animation with 14 interactive moves (Idle, Walk, Run, Dance, Wave, Jump) |
+| 🧑‍🚀 **Astronaut** | `assets/models/cesiumman.glb` | 428 KB | Khronos Group official sample asset (`CesiumMan.glb`) | Creative Commons Attribution 4.0 International (CC-BY 4.0) by Analytical Graphics, Inc. / Cesium | Downloaded 2026-11-22 | Walking space explorer loop, replaces generic Soldier |
+| 🐎 **Horse** | `assets/models/horse.glb` | 178 KB | Three.js official examples (`Horse.glb` by Mirada from *Rome*) | MIT License / CC-BY (Mirada & Three.js authors) | Downloaded 2026-11-22 | Continuous galloping morph animation loop, replaces generic Xbot |
+| 🦊 **Fox** | `assets/models/fox.glb` | 163 KB | Khronos Group official sample asset (`Fox.glb`) | Creative Commons Attribution 4.0 International (CC-BY 4.0) by Tomislav Veg | Downloaded 2026-11-21 | Skeletal animation with 3 interactive states (Survey, Walk, Run) |
+| 🦩 **Flamingo** | `assets/models/flamingo.glb` | 77 KB | Three.js official examples (`Flamingo.glb` by Mirada from *Rome*) | MIT License / CC-BY (Mirada & Three.js authors) | Downloaded 2026-11-21 | Continuous soaring flight morph animation loop |
+
+**Total 3D Model Payload: ~1.31 MB** across all 5 switchable heroes.
+
 ## Not used
 
 | Item | Reason |
