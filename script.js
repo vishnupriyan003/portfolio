@@ -225,9 +225,9 @@ if (rotator && !prefersReducedMotion.matches) {
     robot: {
       name: "Robot",
       url: "assets/models/robot.glb",
-      scale: 0.85,
+      scale: 0.38,
       yOffset: -1.05,
-      cameraDist: 3.6,
+      cameraDist: 3.8,
       specialLabel: "⚡ Dance",
       actions: {
         idle: ["Idle", "Standing"],
@@ -310,8 +310,8 @@ if (rotator && !prefersReducedMotion.matches) {
   let targetPhi = Math.PI / 2.3;
   let currentTheta = 0;
   let currentPhi = Math.PI / 2.3;
-  let targetRadius = 3.6;
-  let currentRadius = 3.6;
+  let targetRadius = 3.8;
+  let currentRadius = 3.8;
   let lastUserInteraction = Date.now();
   const raycaster = new THREE.Raycaster();
   const mouseVec = new THREE.Vector2();
