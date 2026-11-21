@@ -572,7 +572,6 @@ body.is-loaded .site-header {
   object-fit: cover;
   object-position: center top;
   border-radius: 999px 999px 26px 26px;
-  filter: grayscale(1) contrast(1.05);
   box-shadow: var(--shadow-lg);
 }
 
