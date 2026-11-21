@@ -26,11 +26,13 @@
   <link rel="preload" href="{{ asset('assets/fonts/inter-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{{ asset('style.css') }}">
   @php
+    $jobTitle = trim(explode('|', $content['role'])[0]);
+    $jobTitle = trim(explode('@', $jobTitle)[0]) ?: $jobTitle;
     $schema = [
       '@context' => 'https://schema.org',
       '@type' => 'Person',
       'name' => $content['name'],
-      'jobTitle' => $content['role'],
+      'jobTitle' => $jobTitle,
       'email' => $content['email'],
       'telephone' => $content['phone'],
       'address' => $content['location'],
@@ -68,6 +70,7 @@
       <a href="#skills" class="nav-link">Skills</a>
       <a href="#experience" class="nav-link">Experience</a>
       <a href="#projects" class="nav-link">Projects</a>
+      <a href="#devlab" class="nav-link">Dev Lab</a>
       <a href="#contact" class="nav-link">Contact</a>
     </nav>
 
@@ -202,7 +205,7 @@
     <section id="experience" class="section section-card split-section">
       <div class="section-heading">
         <p class="eyebrow">Experience</p>
-        <h2>Practical development across internship and junior developer roles.</h2>
+        <h2>Professional experience across client projects and live product work.</h2>
       </div>
 
       <div class="timeline">
@@ -306,6 +309,242 @@
           <h3>Location Preference</h3>
           <p>{{ $content['location'] }} and {{ lcfirst($content['relocation']) }}.</p>
         </article>
+      </div>
+    </section>
+
+    <section id="devlab" class="section section-card content-band devlab-section" aria-labelledby="devlabTitle">
+      <div class="section-heading">
+        <p class="eyebrow">Developer Playground</p>
+        <h2 id="devlabTitle">Dev Lab: Tricks, Tips & Arcade</h2>
+        <p class="section-subtext">Interactive code tricks, modern productivity snippets, and a live bug-hunting mini-game.</p>
+      </div>
+
+      <!-- Segmented Mode Tabs -->
+      <div class="devlab-tab-nav" role="tablist" aria-label="Dev Lab Modes">
+        <button type="button" class="devlab-tab-btn is-active" id="tabTipsBtn" role="tab" aria-selected="true" aria-controls="devlabTipsVault">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          Pro Tricks & Tips
+        </button>
+        <button type="button" class="devlab-tab-btn" id="tabGameBtn" role="tab" aria-selected="false" aria-controls="devlabGameArena">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M6 12h4m-2-2v4"/><circle cx="17" cy="10" r="1"/><circle cx="15" cy="13" r="1"/></svg>
+          Bug Hunter Arcade
+        </button>
+      </div>
+
+      <!-- TAB 1: TIPS & TRICKS VAULT -->
+      <div class="devlab-view is-active" id="devlabTipsVault" role="tabpanel" aria-labelledby="tabTipsBtn">
+        <!-- Category Filter Pills -->
+        <div class="devlab-filters" role="group" aria-label="Filter tips by technology">
+          <button type="button" class="filter-pill is-active" data-filter="all">All Tricks</button>
+          <button type="button" class="filter-pill" data-filter="css">CSS Magic</button>
+          <button type="button" class="filter-pill" data-filter="js">Modern JS</button>
+          <button type="button" class="filter-pill" data-filter="php">PHP 8+ Pro</button>
+          <button type="button" class="filter-pill" data-filter="tools">DevTools</button>
+        </div>
+
+        <!-- Tip Cards Grid -->
+        <div class="tips-grid">
+          <!-- Tip 1 -->
+          <article class="tip-card" data-category="css">
+            <div class="tip-card-header">
+              <span class="tip-badge badge-css">CSS Grid</span>
+              <button type="button" class="copy-snippet-btn" aria-label="Copy code snippet" title="Copy code">
+                <svg class="copy-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span class="copy-label">Copy</span>
+              </button>
+            </div>
+            <h3>Fluid One-Line Responsive Grid</h3>
+            <p>Eliminate complex media queries. Use CSS Grid auto-fit with minmax for fluid columns that adapt automatically to any screen size.</p>
+            <div class="code-box">
+              <div class="code-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="code-title">layout.css</span></div>
+              <pre><code><span class="token-selector">.responsive-grid</span> {
+  <span class="token-prop">display</span>: grid;
+  <span class="token-prop">grid-template-columns</span>: <span class="token-val">repeat(auto-fit, minmax(280px, 1fr))</span>;
+  <span class="token-prop">gap</span>: <span class="token-val">1.5rem</span>;
+}</code></pre>
+            </div>
+          </article>
+
+          <!-- Tip 2 -->
+          <article class="tip-card" data-category="css">
+            <div class="tip-card-header">
+              <span class="tip-badge badge-css">CSS Magic</span>
+              <button type="button" class="copy-snippet-btn" aria-label="Copy code snippet" title="Copy code">
+                <svg class="copy-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span class="copy-label">Copy</span>
+              </button>
+            </div>
+            <h3>Luminous Gradient Border Card</h3>
+            <p>Create sleek gradient borders using dual background layers with padding-box and border-box clipping without extra wrapper elements.</p>
+            <div class="code-box">
+              <div class="code-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="code-title">glow-card.css</span></div>
+              <pre><code><span class="token-selector">.glow-card</span> {
+  <span class="token-prop">border</span>: <span class="token-val">2px solid transparent</span>;
+  <span class="token-prop">background</span>:
+    <span class="token-val">linear-gradient(#fff, #fff) padding-box</span>,
+    <span class="token-val">linear-gradient(135deg, #10b981, #6366f1) border-box</span>;
+  <span class="token-prop">border-radius</span>: <span class="token-val">16px</span>;
+}</code></pre>
+            </div>
+          </article>
+
+          <!-- Tip 3 -->
+          <article class="tip-card" data-category="js">
+            <div class="tip-card-header">
+              <span class="tip-badge badge-js">Performance</span>
+              <button type="button" class="copy-snippet-btn" aria-label="Copy code snippet" title="Copy code">
+                <svg class="copy-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span class="copy-label">Copy</span>
+              </button>
+            </div>
+            <h3>Lightweight Zero-Dependency Debounce</h3>
+            <p>Prevent server overload and sluggish search inputs with this clean functional debounce closure in 5 lines of pure modern JavaScript.</p>
+            <div class="code-box">
+              <div class="code-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="code-title">debounce.js</span></div>
+              <pre><code><span class="token-kw">const</span> <span class="token-fn">debounce</span> = (fn, delay = <span class="token-num">300</span>) => {
+  <span class="token-kw">let</span> timer;
+  <span class="token-kw">return</span> (...args) => {
+    <span class="token-fn">clearTimeout</span>(timer);
+    timer = <span class="token-fn">setTimeout</span>(() => fn(...args), delay);
+  };
+};</code></pre>
+            </div>
+          </article>
+
+          <!-- Tip 4 -->
+          <article class="tip-card" data-category="js">
+            <div class="tip-card-header">
+              <span class="tip-badge badge-js">Modern JS</span>
+              <button type="button" class="copy-snippet-btn" aria-label="Copy code snippet" title="Copy code">
+                <svg class="copy-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span class="copy-label">Copy</span>
+              </button>
+            </div>
+            <h3>Native Deep Clone with structuredClone()</h3>
+            <p>Stop using <code>JSON.parse(JSON.stringify(obj))</code> which loses Dates, Sets, Maps, and regexes. Modern browsers provide native deep cloning.</p>
+            <div class="code-box">
+              <div class="code-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="code-title">clone.js</span></div>
+              <pre><code><span class="token-comment">// Preserves Dates, Maps, Sets & circular references</span>
+<span class="token-kw">const</span> state = { user: <span class="token-str">"Vichu"</span>, tags: <span class="token-kw">new</span> <span class="token-fn">Set</span>([<span class="token-str">"PHP"</span>, <span class="token-str">"JS"</span>]) };
+<span class="token-kw">const</span> cloned = <span class="token-fn">structuredClone</span>(state);</code></pre>
+            </div>
+          </article>
+
+          <!-- Tip 5 -->
+          <article class="tip-card" data-category="php">
+            <div class="tip-card-header">
+              <span class="tip-badge badge-php">PHP 8+</span>
+              <button type="button" class="copy-snippet-btn" aria-label="Copy code snippet" title="Copy code">
+                <svg class="copy-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span class="copy-label">Copy</span>
+              </button>
+            </div>
+            <h3>PHP 8 Match & Nullsafe Operator</h3>
+            <p>Replace verbose switch statements and repeated <code>isset()</code> guards with strictly-evaluated match expressions and nullsafe chaining.</p>
+            <div class="code-box">
+              <div class="code-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="code-title">Controller.php</span></div>
+              <pre><code><span class="token-var">$status</span> = <span class="token-kw">match</span>(<span class="token-var">$code</span>) {
+    <span class="token-num">200</span>, <span class="token-num">201</span> => <span class="token-str">'Success'</span>,
+    <span class="token-num">404</span>      => <span class="token-str">'Not Found'</span>,
+    <span class="token-kw">default</span>  => <span class="token-str">'Error'</span>,
+};
+
+<span class="token-var">$city</span> = <span class="token-var">$user</span>?->profile?->address?->city ?? <span class="token-str">'Karur'</span>;</code></pre>
+            </div>
+          </article>
+
+          <!-- Tip 6 -->
+          <article class="tip-card" data-category="tools">
+            <div class="tip-card-header">
+              <span class="tip-badge badge-tools">DevTools</span>
+              <button type="button" class="copy-snippet-btn" aria-label="Copy code snippet" title="Copy code">
+                <svg class="copy-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span class="copy-label">Copy</span>
+              </button>
+            </div>
+            <h3>DevTools console.table & copy() Power</h3>
+            <p>Inspect arrays in a neat sortable tabular view, and copy any inspected DOM node directly into your operating system clipboard.</p>
+            <div class="code-box">
+              <div class="code-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="code-title">DevTools Console</span></div>
+              <pre><code><span class="token-comment">// 1. Formats object arrays into a clean sortable table</span>
+<span class="token-fn">console.table</span>(users, [<span class="token-str">"id"</span>, <span class="token-str">"name"</span>, <span class="token-str">"role"</span>]);
+
+<span class="token-comment">// 2. Copies selected Elements Inspector node to clipboard</span>
+<span class="token-fn">copy</span>($0);</code></pre>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- TAB 2: BUG HUNTER ARCADE GAME -->
+      <div class="devlab-view" id="devlabGameArena" role="tabpanel" aria-labelledby="tabGameBtn">
+        <div class="arcade-container">
+          <!-- Terminal Header & HUD -->
+          <div class="arcade-hud">
+            <div class="hud-left">
+              <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+              <span class="hud-title">BugHunter_IDE_v1.0.js</span>
+            </div>
+            <div class="hud-stats">
+              <div class="hud-pill"><span class="hud-label">Score</span> <strong class="hud-val" id="gameScore">0</strong></div>
+              <div class="hud-pill"><span class="hud-label">Combo</span> <strong class="hud-val" id="gameCombo">x1</strong></div>
+              <div class="hud-pill"><span class="hud-label">Time</span> <strong class="hud-val" id="gameTime">25s</strong></div>
+              <div class="hud-pill"><span class="hud-label">Best</span> <strong class="hud-val" id="gameHighScore">0</strong></div>
+              <button type="button" class="hud-audio-btn" id="gameAudioToggle" aria-label="Toggle Sound Effects" title="Toggle audio">
+                <svg id="audioIconOn" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                <svg id="audioIconOff" class="is-hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Progress Bar for Timer -->
+          <div class="arcade-timer-bar" aria-hidden="true"><span id="timerProgress"></span></div>
+
+          <!-- 3x3 Interactive IDE Code Matrix -->
+          <div class="arcade-matrix-stage" id="arcadeStage">
+            <div class="arcade-grid" id="arcadeGrid">
+              <!-- 9 Cells representing code editor windows -->
+              <div class="code-cell" data-cell="0"><span class="cell-line">01</span><code>fn.bootstrap()</code><div class="bug-target" aria-label="Squash bug"></div></div>
+              <div class="code-cell" data-cell="1"><span class="cell-line">02</span><code>auth.guard()</code><div class="bug-target" aria-label="Squash bug"></div></div>
+              <div class="code-cell" data-cell="2"><span class="cell-line">03</span><code>db.query()</code><div class="bug-target" aria-label="Squash bug"></div></div>
+              <div class="code-cell" data-cell="3"><span class="cell-line">04</span><code>api.fetch()</code><div class="bug-target" aria-label="Squash bug"></div></div>
+              <div class="code-cell" data-cell="4"><span class="cell-line">05</span><code>cache.set()</code><div class="bug-target" aria-label="Squash bug"></div></div>
+              <div class="code-cell" data-cell="5"><span class="cell-line">06</span><code>render.view()</code><div class="bug-target" aria-label="Squash bug"></div></div>
+              <div class="code-cell" data-cell="6"><span class="cell-line">07</span><code>route.dispatch()</code><div class="bug-target" aria-label="Squash bug"></div></div>
+              <div class="code-cell" data-cell="7"><span class="cell-line">08</span><code>json.encode()</code><div class="bug-target" aria-label="Squash bug"></div></div>
+              <div class="code-cell" data-cell="8"><span class="cell-line">09</span><code>return status;</code><div class="bug-target" aria-label="Squash bug"></div></div>
+            </div>
+
+            <!-- Start Game Overlay -->
+            <div class="arcade-overlay" id="arcadeStartOverlay">
+              <div class="overlay-card">
+                <span class="overlay-icon">👾</span>
+                <h3>Bug Hunter Arcade</h3>
+                <p>Software bugs are corrupting the codebase! Click and squash as many bugs as you can in <strong>25 seconds</strong> to build combos and unlock your developer rank.</p>
+                <button type="button" class="btn btn-primary start-game-btn" id="startGameBtn">
+                  🚀 Start Debugging Sprint
+                </button>
+              </div>
+            </div>
+
+            <!-- Game Over Victory Overlay -->
+            <div class="arcade-overlay is-hidden" id="arcadeGameOverOverlay">
+              <div class="overlay-card">
+                <span class="overlay-rank-emoji" id="gameOverEmoji">🏆</span>
+                <p class="overlay-kicker">Debugging Sprint Finished</p>
+                <h3 id="gameOverRankTitle">Senior Problem Solver</h3>
+                <div class="game-results-grid">
+                  <div><span class="res-label">Score</span><strong class="res-val" id="finalScoreVal">0</strong></div>
+                  <div><span class="res-label">Squashed</span><strong class="res-val" id="finalSquashedVal">0 bugs</strong></div>
+                  <div><span class="res-label">Max Combo</span><strong class="res-val" id="finalComboVal">x1</strong></div>
+                </div>
+                <button type="button" class="btn btn-primary start-game-btn" id="restartGameBtn">
+                  🔄 Play Again
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
