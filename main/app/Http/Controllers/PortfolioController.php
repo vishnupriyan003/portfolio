@@ -52,8 +52,12 @@ class PortfolioController extends Controller
             'hero_title' => 'Building responsive web experiences with clean UI and practical backend logic.',
             'summary' => 'I am a Karur based developer with hands-on experience in HTML, CSS, JavaScript, PHP, CodeIgniter, MySQL, React, Tailwind CSS, and Figma. I enjoy turning business requirements into smooth, usable web applications.',
             'about_title' => 'Front-end developer grounded in HTML, CSS, JavaScript, and PHP.',
-            'about_text' => "Passionate Front-end Developer with a strong foundation in HTML, CSS, JavaScript, and PHP. Skilled in UI/UX design, responsive web development, and dynamic web applications.\n\nBasic understanding of Java and SQL, enabling seamless collaboration with back-end developers. Excited to create visually appealing and high-performance web experiences in a fast-paced environment.",
-            'about_facts' => "Education|B.E. Computer Science and Engineering (2020 - 2024), VSB Engineering College, Karur - Aggregate 79%\nExperience|{SINCE} - present, {TENURE} as PHP Developer at Knock The Globe Technologies, plus a 3 month PHP development internship\nBased in|Karur, Tamil Nadu, India - open to relocating for the right opportunity\nLanguages|English and Tamil",
+            'about_text' => "Passionate Front-end Developer with a strong foundation in HTML, CSS, JavaScript, and PHP. Skilled in UI/UX design, responsive web development, and dynamic web applications.\n\nBasic understanding of Java and SQL, enabling seamless collaboration with back-end developers. Excited to create visually appealing and high-performance web experiences in a fast-paced environment.\n\nCurrently a PHP Developer at Knock The Globe Technologies, shipping and maintaining production web applications for 81 client projects — healthcare, jewellery, textile e-commerce, finance and travel — covering CRM modules, invoice and GST logic, Excel imports, WhatsApp API integrations, and live-site support.",
+            'about_facts' => "Experience|{SINCE} - present, {TENURE} as PHP Developer at Knock The Globe Technologies, plus a 3 month PHP development internship\nBased in|Karur, Tamil Nadu, India - open to relocating for the right opportunity\nLanguages|English and Tamil",
+            'about_chips' => 'PHP, CodeIgniter 4, Laravel, MySQL, JavaScript, REST APIs, Bootstrap, Git',
+            'career_title' => 'Practical delivery across production applications and client systems.',
+            'career_points' => "Core stack|PHP 7.4–8.3, CodeIgniter 3 & 4, Laravel, MySQL, HTML/CSS/JS, Bootstrap, jQuery, DataTables, REST APIs\nClient delivery|CRM pages, invoice & GST logic, Excel imports (PhpSpreadsheet), bill PDFs via WhatsApp Business Cloud API, live-site debugging\nIndustries|81 client projects — healthcare (Somasundaram Eye Hospital), jewellery (NPN Jewellery), textile e-commerce (Texspace), finance, travel\nFreelancing|Fiverr & Truelancer gigs: PHP/Laravel builds, admin panels, bug fixes, API integration, payment gateways, deployment\nLearning path|React, Node/Express, Angular, .NET CRUD, Dart alongside daily PHP delivery",
+            'career_deep' => "Next phase|Grow freelance income through PHP development and hosting maintenance, sharpen Laravel ecosystem expertise\nBuilding now|Textile ERP (fabric stages: Kora, White, Dyeing, Printed -> POs -> receipts -> delivery-based stock) + ATOM AI personal PHP assistant\nDaily routine|Consistent weekday regimen: 2 hours coding practice + 1 hour dedicated project work\nLong-term goal|Internationally employable full-stack software engineer with opportunities for international work\nStudy focus|GATE Computer Science preparation alongside daily production engineering",
             'location' => 'Karur, Tamil Nadu, India',
             'email' => 'vishnupriyanrenganathan@gmail.com',
             'phone' => '+91 9629760070',
@@ -94,6 +98,9 @@ class PortfolioController extends Controller
 
         $content['stats'] = $this->parseLines($content['stats'], ['value', 'label']);
         $content['about_facts'] = $this->parseLines($content['about_facts'], ['label', 'value']);
+        $content['about_chips'] = $this->parseCommaList($content['about_chips'] ?? '');
+        $content['career_points'] = $this->parseLines($content['career_points'] ?? '', ['label', 'value']);
+        $content['career_deep'] = $this->parseLines($content['career_deep'] ?? '', ['label', 'value']);
         $content['skills'] = $this->parseLines($content['skills'], ['title', 'text', 'icon']);
         $content['experience'] = $this->parseLines($content['experience'], ['meta', 'title', 'company', 'text']);
         $content['education'] = $this->parseLines($content['education'], ['year', 'title', 'text']);

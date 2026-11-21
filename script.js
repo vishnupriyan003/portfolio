@@ -683,3 +683,26 @@ if (rotator && !prefersReducedMotion.matches) {
     }
   });
 })();
+
+// ── Career Focus Drawer Toggle ─────────────────────────────────────────
+(() => {
+  const drawerToggle = document.getElementById("drawerToggle");
+  const careerDrawer = document.getElementById("careerDrawer");
+
+  if (!drawerToggle || !careerDrawer) {
+    return;
+  }
+
+  drawerToggle.addEventListener("click", () => {
+    const isExpanded = drawerToggle.getAttribute("aria-expanded") === "true";
+    const nextState = !isExpanded;
+
+    drawerToggle.setAttribute("aria-expanded", String(nextState));
+    careerDrawer.setAttribute("aria-hidden", String(!nextState));
+
+    const toggleText = drawerToggle.querySelector(".toggle-text");
+    if (toggleText) {
+      toggleText.textContent = nextState ? "Show Less" : "Dive Deeper";
+    }
+  });
+})();

@@ -67,6 +67,7 @@
     <nav class="primary-nav" id="primaryNav" aria-label="Primary navigation">
       <a href="#home" class="nav-link">Home</a>
       <a href="#about" class="nav-link">About</a>
+      <a href="#career" class="nav-link">Career</a>
       <a href="#skills" class="nav-link">Skills</a>
       <a href="#experience" class="nav-link">Experience</a>
       <a href="#projects" class="nav-link">Projects</a>
@@ -175,6 +176,13 @@
               <p>{{ trim($paragraph) }}</p>
             @endif
           @endforeach
+          @if (!empty($content['about_chips']))
+            <div class="about-chips" aria-label="Core technologies">
+              @foreach ($content['about_chips'] as $chip)
+                <span class="about-chip-pill">{{ $chip }}</span>
+              @endforeach
+            </div>
+          @endif
         </div>
         <dl class="about-facts">
           @foreach ($content['about_facts'] as $fact)
@@ -185,6 +193,41 @@
           @endforeach
         </dl>
       </div>
+    </section>
+
+    <section id="career" class="section section-card content-band" aria-labelledby="careerTitle">
+      <div class="section-heading">
+        <p class="eyebrow">Career Focus</p>
+        <h2 id="careerTitle">{{ $content['career_title'] }}</h2>
+      </div>
+
+      <div class="career-grid">
+        @foreach ($content['career_points'] as $point)
+          <article class="info-card career-card">
+            <span class="career-label">{{ $point['label'] }}</span>
+            <p>{{ $point['value'] }}</p>
+          </article>
+        @endforeach
+      </div>
+
+      @if (!empty($content['career_deep']))
+        <div class="career-drawer-wrapper">
+          <div id="careerDrawer" class="career-drawer" aria-hidden="true">
+            <div class="career-drawer-inner career-grid">
+              @foreach ($content['career_deep'] as $point)
+                <article class="info-card career-card card-accent">
+                  <span class="career-label">{{ $point['label'] }}</span>
+                  <p>{{ $point['value'] }}</p>
+                </article>
+              @endforeach
+            </div>
+          </div>
+          <button type="button" class="btn btn-secondary drawer-toggle" id="drawerToggle" aria-expanded="false" aria-controls="careerDrawer">
+            <span class="toggle-text">Dive Deeper</span>
+            <svg class="icon icon-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+        </div>
+      @endif
     </section>
 
     <section id="skills" class="section section-card content-band">
