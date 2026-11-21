@@ -314,6 +314,21 @@
       </div>
     </section>
 
+    <section class="section section-card resume-section" aria-labelledby="resumeTitle">
+      <div class="section-heading">
+        <p class="eyebrow">Resume</p>
+        <h2 id="resumeTitle">Preview and Download</h2>
+      </div>
+      <div class="resume-preview-images">
+        @foreach ($content['resume_previews'] as $index => $preview)
+          <img src="{{ asset($preview) }}" alt="Resume page {{ $index + 1 }} preview" loading="lazy" decoding="async">
+        @endforeach
+      </div>
+      <a href="{{ asset($content['resume_pdf']) }}" class="btn btn-primary" target="_blank" rel="noopener">
+        <x-icon name="pdf" /> Open Resume PDF
+      </a>
+    </section>
+
     <section id="devlab" class="section section-card content-band devlab-section" aria-labelledby="devlabTitle">
       <div class="section-heading">
         <p class="eyebrow">Developer Playground</p>
@@ -548,21 +563,6 @@
           </div>
         </div>
       </div>
-    </section>
-
-    <section class="section section-card resume-section" aria-labelledby="resumeTitle">
-      <div class="section-heading">
-        <p class="eyebrow">Resume</p>
-        <h2 id="resumeTitle">Preview and Download</h2>
-      </div>
-      <div class="resume-preview-images">
-        @foreach ($content['resume_previews'] as $index => $preview)
-          <img src="{{ asset($preview) }}" alt="Resume page {{ $index + 1 }} preview" loading="lazy" decoding="async">
-        @endforeach
-      </div>
-      <a href="{{ asset($content['resume_pdf']) }}" class="btn btn-primary" target="_blank" rel="noopener">
-        <x-icon name="pdf" /> Open Resume PDF
-      </a>
     </section>
 
     <section id="contact-form" class="section section-card contact-form-section" aria-labelledby="contactFormTitle">
