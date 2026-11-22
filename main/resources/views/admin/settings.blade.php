@@ -248,6 +248,16 @@
           <textarea id="seo_keywords" name="seo_keywords" required>{{ old('seo_keywords', $settings['seo_keywords']) }}</textarea>
           <p class="help">Comma separated keywords for search engines.</p>
         </div>
+        <div style="margin-top: 16px;">
+          <label for="google_site_verification">Google Search Console Verification</label>
+          <input id="google_site_verification" name="google_site_verification" value="{{ old('google_site_verification', $settings['google_site_verification']) }}" maxlength="255" placeholder="e.g. AbC123xyz...=">
+          <p class="help">Paste the token from Google Search Console → Settings → Ownership verification. Leave blank if not set up yet.</p>
+        </div>
+        <div style="margin-top: 16px;">
+          <label for="bing_site_verification">Bing Webmaster Verification</label>
+          <input id="bing_site_verification" name="bing_site_verification" value="{{ old('bing_site_verification', $settings['bing_site_verification']) }}" maxlength="255" placeholder="msvalidate.01 token">
+          <p class="help">Paste the content value from Bing Webmaster Tools. Leave blank if not set up yet.</p>
+        </div>
       </section>
 
       <section class="panel">

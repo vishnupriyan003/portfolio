@@ -1,2 +1,5 @@
 User-agent: *
-Disallow:
+Disallow: /vpadmin
+Disallow: /captcha/
+
+Sitemap: https://vishnupriyanweb.free.nf/sitemap.xml

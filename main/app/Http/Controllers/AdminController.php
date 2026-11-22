@@ -102,6 +102,8 @@ class AdminController extends Controller
             'seo_title' => ['required', 'string', 'max:160'],
             'seo_description' => ['required', 'string', 'max:300'],
             'seo_keywords' => ['required', 'string', 'max:500'],
+            'google_site_verification' => ['nullable', 'string', 'max:255'],
+            'bing_site_verification' => ['nullable', 'string', 'max:255'],
             'certificates' => ['required', 'string'],
             'new_certificate_title' => ['nullable', 'string', 'max:120'],
             'new_certificate_image' => ['nullable', 'image', 'max:4096'],

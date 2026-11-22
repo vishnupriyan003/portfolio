@@ -1,24 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="{{ $content['seo_description'] }}">
   <meta name="keywords" content="{{ $content['seo_keywords'] }}">
-  <meta name="author" content="Vishnupriyan ai">
-  <meta name="robots" content="index, follow">
+  <meta name="author" content="{{ $content['name'] }}">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
   <meta name="geo.region" content="IN-TN">
   <meta name="geo.placename" content="Karur, Tamil Nadu, India">
+  @if (!empty($content['google_site_verification']))
+    <meta name="google-site-verification" content="{{ $content['google_site_verification'] }}">
+  @endif
+  @if (!empty($content['bing_site_verification']))
+    <meta name="msvalidate.01" content="{{ $content['bing_site_verification'] }}">
+  @endif
   <link rel="canonical" href="{{ url('/') }}">
   <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="{{ $content['name'] }} — Portfolio">
+  <meta property="og:locale" content="en_IN">
   <meta property="og:title" content="{{ $content['seo_title'] }}">
   <meta property="og:description" content="{{ $content['seo_description'] }}">
   <meta property="og:image" content="{{ asset('image/vishnupriyan_r.jpg') }}">
+  <meta property="og:image:width" content="1152">
+  <meta property="og:image:height" content="1440">
+  <meta property="og:image:alt" content="{{ $content['name'] }}, PHP Developer in Karur">
   <meta property="og:url" content="{{ url('/') }}">
+  <meta property="profile:username" content="vishnupriyan003">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ $content['seo_title'] }}">
   <meta name="twitter:description" content="{{ $content['seo_description'] }}">
   <meta name="twitter:image" content="{{ asset('image/vishnupriyan_r.jpg') }}">
+  <meta name="twitter:image:alt" content="{{ $content['name'] }}, PHP Developer in Karur">
   <link rel="icon" type="image/png" href="{{ asset('image/icon.png') }}">
   <title>{{ $content['seo_title'] }}</title>
   <link rel="preload" href="{{ asset('assets/fonts/instrumentserif-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
@@ -28,17 +41,56 @@
   @php
     $jobTitle = trim(explode('|', $content['role'])[0]);
     $jobTitle = trim(explode('@', $jobTitle)[0]) ?: $jobTitle;
-    $schema = [
-      '@context' => 'https://schema.org',
+
+    $siteUrl = url('/');
+    $siteImage = asset('image/vishnupriyan_r.jpg');
+
+    // PostalAddress built from the location setting, e.g. "Karur, Tamil Nadu, India"
+    $locParts = array_map('trim', explode(',', $content['location']));
+    $address = [
+      '@type' => 'PostalAddress',
+      'addressLocality' => $locParts[0] ?? 'Karur',
+      'addressRegion' => $locParts[1] ?? 'Tamil Nadu',
+      'addressCountry' => 'IN',
+    ];
+
+    $school = trim(explode('|', $content['education'][0]['text'] ?? '')[0]);
+
+    $person = [
       '@type' => 'Person',
+      '@id' => $siteUrl . '#person',
       'name' => $content['name'],
       'jobTitle' => $jobTitle,
+      'description' => $content['summary'],
       'email' => $content['email'],
       'telephone' => $content['phone'],
-      'address' => $content['location'],
-      'url' => url('/'),
-      'sameAs' => [$content['github'], $content['linkedin']],
-      'knowsAbout' => ['Frontend Development', 'PHP', 'CodeIgniter', 'MySQL', 'React', 'JavaScript', 'Tailwind CSS', 'Figma', 'UI/UX Design', 'Karur web development'],
+      'image' => $siteImage,
+      'url' => $siteUrl,
+      'address' => $address,
+      'worksFor' => ['@type' => 'Organization', 'name' => 'Knock The Globe Technologies'],
+      'knowsLanguage' => ['English', 'Tamil'],
+      'knowsAbout' => ['Web Development', 'Frontend Development', 'PHP', 'CodeIgniter', 'Laravel', 'MySQL', 'JavaScript', 'React', 'Tailwind CSS', 'Figma', 'UI/UX Design', 'Karur web development'],
+      'sameAs' => array_values(array_filter([$content['github'], $content['linkedin']])),
+    ];
+
+    if ($school !== '') {
+      $person['alumniOf'] = ['@type' => 'CollegeOrUniversity', 'name' => $school];
+    }
+
+    $schema = [
+      '@context' => 'https://schema.org',
+      '@graph' => [
+        [
+          '@type' => 'WebSite',
+          '@id' => $siteUrl . '#website',
+          'url' => $siteUrl,
+          'name' => $content['name'] . ' — ' . $jobTitle,
+          'description' => $content['seo_description'],
+          'inLanguage' => 'en-IN',
+          'publisher' => ['@id' => $siteUrl . '#person'],
+        ],
+        $person,
+      ],
     ];
   @endphp
   <script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
@@ -133,7 +185,7 @@
         </aside>
 
         <figure class="hero-portrait">
-          <img src="{{ asset('image/vishnupriyan_r.jpg') }}" alt="{{ $content['name'] }}" fetchpriority="high" decoding="async">
+          <img src="{{ asset('image/vishnupriyan_r.jpg') }}" alt="{{ $content['name'] }}, PHP Developer in Karur, Tamil Nadu" width="1152" height="1440" fetchpriority="high" decoding="async">
         </figure>
 
         @foreach (collect($content['skills'])->take(3) as $index => $skill)
@@ -233,7 +285,7 @@
     <section id="skills" class="section section-card content-band">
       <div class="section-heading">
         <p class="eyebrow">Capabilities</p>
-        <h2>Skills shaped by real web application work.</h2>
+        <h2>Skills shaped by real PHP and frontend web application work.</h2>
       </div>
 
       <div class="skills-grid">
@@ -250,7 +302,7 @@
     <section id="experience" class="section section-card split-section">
       <div class="section-heading">
         <p class="eyebrow">Experience</p>
-        <h2>Professional experience across client projects and live product work.</h2>
+        <h2>Professional experience as a PHP developer across client projects and live product work.</h2>
       </div>
 
       <div class="timeline">
@@ -512,8 +564,8 @@
     <div class="footer-links">
       <a href="mailto:{{ $content['email'] }}"><x-icon name="envelope" /> Email</a>
       <a href="tel:{{ preg_replace('/\s+/', '', $content['phone']) }}"><x-icon name="phone" /> {{ $content['phone'] }}</a>
-      <a href="{{ $content['github'] }}" target="_blank" rel="noopener"><x-icon name="github" /> GitHub</a>
-      <a href="{{ $content['linkedin'] }}" target="_blank" rel="noopener"><x-icon name="linkedin" /> LinkedIn</a>
+      <a href="{{ $content['github'] }}" target="_blank" rel="noopener me"><x-icon name="github" /> GitHub</a>
+      <a href="{{ $content['linkedin'] }}" target="_blank" rel="noopener me"><x-icon name="linkedin" /> LinkedIn</a>
     </div>
   </footer>
 
