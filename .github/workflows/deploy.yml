@@ -3,6 +3,7 @@ name: Deploy to InfinityFree
 on:
   push:
     branches:
+      - live
       - today
       - main
   workflow_dispatch:
