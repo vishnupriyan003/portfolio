@@ -12,18 +12,38 @@ class ContactSecurityService
      */
     public function generateCaptcha(): string
     {
-        $a = random_int(2, 12);
-        $b = random_int(1, 9);
-        $op = random_int(0, 1) === 1 ? '+' : '-';
-        if ($op === '-' && $b > $a) {
-            [$a, $b] = [$b, $a];
-        }
-        $answer = $op === '+' ? ($a + $b) : ($a - $b);
+        $lastQ = session('contact_captcha_last_q');
+        $attempts = 0;
+
+        do {
+            $type = random_int(1, 3);
+            if ($type === 1) { // Addition
+                $a = random_int(2, 14);
+                $b = random_int(1, 12);
+                $question = "{$a} + {$b} = ?";
+                $answer = $a + $b;
+            } elseif ($type === 2) { // Subtraction
+                $a = random_int(3, 16);
+                $b = random_int(1, 10);
+                if ($b > $a) {
+                    [$a, $b] = [$b, $a];
+                }
+                $question = "{$a} - {$b} = ?";
+                $answer = $a - $b;
+            } else { // Small Multiplication
+                $a = random_int(2, 6);
+                $b = random_int(2, 5);
+                $question = "{$a} × {$b} = ?";
+                $answer = $a * $b;
+            }
+            $attempts++;
+        } while ($question === $lastQ && $attempts < 10);
 
         session(['contact_captcha_answer' => $answer]);
+        session(['contact_captcha_last_q' => $question]);
         session(['contact_rendered_at' => now()->timestamp]);
 
-        return "{$a} {$op} {$b} = ?";
+        return $question;
     }
 
     /**

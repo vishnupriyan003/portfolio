@@ -768,8 +768,11 @@ if (rotator && !prefersReducedMotion.matches) {
   btnRefresh.addEventListener("click", async () => {
     const url = btnRefresh.getAttribute("data-url") || "/captcha/refresh";
     const span = btnRefresh.querySelector("span");
+    const icon = btnRefresh.querySelector(".icon") || btnRefresh.querySelector("svg");
     const originalText = span ? span.textContent : "Refresh";
     if (span) span.textContent = "…";
+    if (icon) icon.classList.add("is-spinning");
+    badge.classList.add("is-updating");
     btnRefresh.disabled = true;
 
     try {
@@ -789,8 +792,12 @@ if (rotator && !prefersReducedMotion.matches) {
     } catch (err) {
       console.warn("CAPTCHA refresh error:", err);
     } finally {
-      if (span) span.textContent = originalText;
-      btnRefresh.disabled = false;
+      setTimeout(() => {
+        if (span) span.textContent = originalText;
+        if (icon) icon.classList.remove("is-spinning");
+        badge.classList.remove("is-updating");
+        btnRefresh.disabled = false;
+      }, 250);
     }
   });
 })();

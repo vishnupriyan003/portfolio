@@ -37,7 +37,7 @@
   <link rel="preload" href="{{ asset('assets/fonts/instrumentserif-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ asset('assets/fonts/instrumentserif-latin-400-italic.woff2') }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ asset('assets/fonts/inter-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="{{ asset('style.css') }}?v=20261122e">
+  <link rel="stylesheet" href="{{ asset('style.css') }}?v=20261122f">
   @php
     $jobTitle = trim(explode('|', $content['role'])[0]);
     $jobTitle = trim(explode('@', $jobTitle)[0]) ?: $jobTitle;
@@ -540,7 +540,7 @@
           <div class="captcha-input-row">
             <input type="number" id="captchaInput" name="captcha" required placeholder="Enter number" class="captcha-input" autocomplete="off">
             <button type="button" class="btn btn-captcha-refresh" id="btnRefreshCaptcha" data-url="{{ route('captcha.refresh') }}" title="Change challenge" aria-label="Generate new security question">
-              <x-icon name="trending" /> <span>Refresh</span>
+              <x-icon name="refresh" /> <span>Refresh</span>
             </button>
           </div>
         </div>
@@ -574,6 +574,6 @@
 
   <script src="{{ asset('assets/vendor/three.min.js') }}"></script>
   <script src="{{ asset('assets/vendor/GLTFLoader.js') }}"></script>
-  <script src="{{ asset('script.js') }}"></script>
+  <script src="{{ asset('script.js') }}?v=20261122f"></script>
 </body>
 </html>

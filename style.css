@@ -2120,6 +2120,12 @@ body.has-custom-cursor .cursor-ring {
   font-size: 15px;
   color: var(--ink);
   letter-spacing: 0.5px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.captcha-badge.is-updating {
+  opacity: 0.4;
+  transform: scale(0.94);
 }
 
 .captcha-input-row {
@@ -2157,4 +2163,14 @@ body.has-custom-cursor .cursor-ring {
 .btn-captcha-refresh .icon {
   width: 16px;
   height: 16px;
+  transition: transform 0.3s ease;
+}
+
+.btn-captcha-refresh .icon.is-spinning {
+  animation: captchaSpin 0.6s linear infinite;
+}
+
+@keyframes captchaSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

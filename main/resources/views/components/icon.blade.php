@@ -11,7 +11,7 @@
 @php
     $name = strtolower(trim((string) $name));
     $name = preg_replace('/^fa[srlb]?-?/', '', $name) ?: 'code';
-    $known = ['code', 'server', 'database', 'tools', 'laptop', 'download', 'trending',
+    $known = ['code', 'server', 'database', 'tools', 'laptop', 'download', 'trending', 'refresh',
               'check', 'award', 'pdf', 'send', 'envelope', 'phone', 'github', 'linkedin'];
     if (!in_array($name, $known, true)) {
         $name = 'code';
@@ -60,6 +60,9 @@
         @case('trending')
             <polyline points="3.2 16.8 9.2 10.8 13 14.6 20.8 6.6"></polyline>
             <polyline points="15.6 6.6 20.8 6.6 20.8 11.6"></polyline>
+            @break
+        @case('refresh')
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path>
             @break
         @case('check')
             <polyline points="4.6 12.6 9.6 17.6 19.4 6.6"></polyline>
