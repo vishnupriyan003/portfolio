@@ -30,10 +30,12 @@
 
 # --- Gzip compression (faster page load = SEO ranking signal) ---
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
-    AddOutputFilterByType DEFLATE application/javascript application/json
-    AddOutputFilterByType DEFLATE application/xml application/rss+xml
-    AddOutputFilterByType DEFLATE image/svg+xml
+    <IfModule mod_filter.c>
+        AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+        AddOutputFilterByType DEFLATE application/javascript application/json
+        AddOutputFilterByType DEFLATE application/xml application/rss+xml
+        AddOutputFilterByType DEFLATE image/svg+xml
+    </IfModule>
 </IfModule>
 
 # --- Browser caching for static assets ---
