@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ContactMessage;
 use App\Models\Setting;
+use App\Services\ContactSecurityService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,19 +18,45 @@ class PortfolioController extends Controller
      */
     private const CURRENT_ROLE_START = '2025-06-01';
 
-    public function index(): View
+    public function index(ContactSecurityService $security): View
     {
         $views = (int) Setting::valueFor('portfolio_views', 0) + 1;
         Setting::put('portfolio_views', $views);
 
+        $captchaQuestion = $security->generateCaptcha();
+
         return view('portfolio', [
             'content' => $this->content(),
             'views' => $views,
+            'captchaQuestion' => $captchaQuestion,
         ]);
     }
 
-    public function storeContact(Request $request): RedirectResponse
+    public function refreshCaptcha(ContactSecurityService $security): JsonResponse
     {
+        return response()->json([
+            'question' => $security->generateCaptcha(),
+        ]);
+    }
+
+    public function storeContact(Request $request, ContactSecurityService $security): RedirectResponse
+    {
+        // 1. Bot Honeypot defense - silent drop
+        if ($security->isBotHoneypotTriggered($request->input('website'))) {
+            return back()->with('contact_success', 'Message sent successfully. I will get back to you soon.');
+        }
+
+        // 2. Time-lock defense - prevent automated sub-second submissions
+        if ($security->isTimeLockViolated(session('contact_rendered_at'))) {
+            return back()->withInput()->withErrors(['captcha' => 'Submission completed too fast. Please take your time and try again.']);
+        }
+
+        // 3. CAPTCHA verification & one-time session invalidation
+        if (!$security->verifyCaptcha($request->input('captcha'))) {
+            return back()->withInput()->withErrors(['captcha' => 'Incorrect CAPTCHA answer. Please try again.']);
+        }
+
+        // 4. Input validation rules
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
             'email' => ['required', 'email', 'max:160'],
@@ -36,7 +64,15 @@ class PortfolioController extends Controller
             'message' => ['required', 'string', 'min:10', 'max:3000'],
         ]);
 
-        ContactMessage::create(array_merge($data, [
+        // 5. Anti-attack sanitization (XSS, CRLF header injection, link spam)
+        try {
+            $sanitized = $security->sanitizeAndValidate($data);
+        } catch (\InvalidArgumentException $e) {
+            return back()->withInput()->withErrors(['message' => $e->getMessage()]);
+        }
+
+        // 6. Safe database persistence via Eloquent ORM parameterized statements
+        ContactMessage::create(array_merge($sanitized, [
             'ip_address' => $request->ip(),
             'user_agent' => substr((string) $request->userAgent(), 0, 255),
         ]));

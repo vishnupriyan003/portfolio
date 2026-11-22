@@ -753,3 +753,44 @@ if (rotator && !prefersReducedMotion.matches) {
     }
   });
 })();
+
+
+// ── Dynamic Anti-Bot CAPTCHA Refresh ─────────────────────────────────
+(() => {
+  const btnRefresh = document.getElementById("btnRefreshCaptcha");
+  const badge = document.getElementById("captchaBadge");
+  const input = document.getElementById("captchaInput");
+
+  if (!btnRefresh || !badge) {
+    return;
+  }
+
+  btnRefresh.addEventListener("click", async () => {
+    const url = btnRefresh.getAttribute("data-url") || "/captcha/refresh";
+    const span = btnRefresh.querySelector("span");
+    const originalText = span ? span.textContent : "Refresh";
+    if (span) span.textContent = "…";
+    btnRefresh.disabled = true;
+
+    try {
+      const res = await fetch(url, {
+        headers: { "Accept": "application/json" }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.question) {
+          badge.textContent = data.question;
+          if (input) {
+            input.value = "";
+            input.focus();
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("CAPTCHA refresh error:", err);
+    } finally {
+      if (span) span.textContent = originalText;
+      btnRefresh.disabled = false;
+    }
+  });
+})();

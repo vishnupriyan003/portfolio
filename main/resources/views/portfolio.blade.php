@@ -456,6 +456,10 @@
 
       <form class="contact-form" method="POST" action="{{ route('contact.store') }}">
         @csrf
+        <div class="hp-wrap" aria-hidden="true">
+          <label for="form_website">Website</label>
+          <input type="text" id="form_website" name="website" tabindex="-1" autocomplete="off" value="">
+        </div>
         <div class="form-grid">
           <label>
             <span>Name</span>
@@ -474,6 +478,17 @@
           <span>Message</span>
           <textarea name="message" required minlength="10" maxlength="3000">{{ old('message') }}</textarea>
         </label>
+        <div class="captcha-group">
+          <label for="captchaInput">
+            <span>Security Verification: Calculate <strong class="captcha-badge" id="captchaBadge">{{ $captchaQuestion ?? 'Security Challenge' }}</strong></span>
+          </label>
+          <div class="captcha-input-row">
+            <input type="number" id="captchaInput" name="captcha" required placeholder="Enter number" class="captcha-input" autocomplete="off">
+            <button type="button" class="btn btn-captcha-refresh" id="btnRefreshCaptcha" data-url="{{ route('captcha.refresh') }}" title="Change challenge" aria-label="Generate new security question">
+              <x-icon name="trending" /> <span>Refresh</span>
+            </button>
+          </div>
+        </div>
         @if ($errors->any())
           <div class="form-error">{{ $errors->first() }}</div>
         @endif

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PortfolioController::class, 'index'])->name('portfolio');
 Route::post('/contact', [PortfolioController::class, 'storeContact'])->name('contact.store');
+Route::get('/captcha/refresh', [PortfolioController::class, 'refreshCaptcha'])->name('captcha.refresh');
 
 Route::get('/vpadmin', [AdminController::class, 'login'])->name('admin.login');
 Route::post('/vpadmin', [AdminController::class, 'authenticate'])->name('admin.authenticate');
