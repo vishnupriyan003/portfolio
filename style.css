@@ -395,7 +395,7 @@ body.is-loaded .site-header {
 
 .hero-copy {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   max-width: 880px;
 }
 
@@ -457,7 +457,7 @@ body.is-loaded .site-header {
   position: relative;
   width: min(1000px, 100%);
   aspect-ratio: 1000 / 560;
-  margin-top: 44px;
+  margin-top: clamp(28px, 4vw, 44px);
 }
 
 .hero-connectors {
@@ -562,17 +562,25 @@ body.is-loaded .site-header {
   bottom: 0;
   z-index: 2;
   width: min(42%, 360px);
+  max-height: 100%;
+  aspect-ratio: 4 / 5;
   margin: 0;
   transform: translateX(-50%);
+  border-radius: 999px 999px 26px 26px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  background: var(--surface);
 }
 
+.hero-portrait picture,
 .hero-portrait img {
+  display: block;
   width: 100%;
+  height: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   object-position: center top;
-  border-radius: 999px 999px 26px 26px;
-  box-shadow: var(--shadow-lg);
+  border-radius: inherit;
 }
 
 .photo-chip {
@@ -592,7 +600,7 @@ body.is-loaded .site-header {
   backdrop-filter: blur(6px);
 }
 
-.photo-chip-1 { left: 24%; top: 30%; }
+.photo-chip-1 { left: 28%; top: 30%; }
 .photo-chip-2 { right: 22%; top: 46%; }
 .photo-chip-3 { left: 27%; top: 63%; }
 
@@ -1821,7 +1829,8 @@ body.has-custom-cursor .cursor-ring {
     justify-content: flex-start;
   }
 
-  .hero-badge {
+  .hero-badge,
+  .photo-chip {
     display: none;
   }
 
@@ -1832,9 +1841,13 @@ body.has-custom-cursor .cursor-ring {
   .float-card-right {
     width: 170px;
   }
+
+  .hero-portrait {
+    width: min(38%, 320px);
+  }
 }
 
-@media (max-width: 880px) {
+@media (max-width: 1020px) {
   /* Pill nav drops to its own row — no hamburger (links wrap). */
   .site-header {
     grid-template-columns: auto auto;
@@ -1849,7 +1862,7 @@ body.has-custom-cursor .cursor-ring {
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 800px) {
   .hero {
     padding-top: 32px;
     padding-bottom: 56px;
@@ -1888,8 +1901,13 @@ body.has-custom-cursor .cursor-ring {
   .hero-portrait {
     position: static;
     transform: none;
-    width: min(300px, 82%);
+    width: min(280px, 78%);
+    max-width: 100%;
+    aspect-ratio: 4 / 5;
     order: -1;
+    margin: 0 auto;
+    border-radius: 999px 999px 24px 24px;
+    overflow: hidden;
   }
 
   .timeline::before {

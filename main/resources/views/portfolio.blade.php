@@ -21,29 +21,29 @@
   <meta property="og:locale" content="en_IN">
   <meta property="og:title" content="{{ $content['seo_title'] }}">
   <meta property="og:description" content="{{ $content['seo_description'] }}">
-  <meta property="og:image" content="{{ asset('image/vishnupriyan_r.jpg') }}">
-  <meta property="og:image:width" content="1152">
-  <meta property="og:image:height" content="1440">
-  <meta property="og:image:alt" content="{{ $content['name'] }}, PHP Developer in Karur">
+  <meta property="og:image" content="{{ asset('image/hero-illustration.png') }}">
+  <meta property="og:image:width" content="868">
+  <meta property="og:image:height" content="1085">
+  <meta property="og:image:alt" content="Illustration of {{ $content['name'] }}, PHP Developer in Karur">
   <meta property="og:url" content="{{ url('/') }}">
   <meta property="profile:username" content="vishnupriyan003">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ $content['seo_title'] }}">
   <meta name="twitter:description" content="{{ $content['seo_description'] }}">
-  <meta name="twitter:image" content="{{ asset('image/vishnupriyan_r.jpg') }}">
-  <meta name="twitter:image:alt" content="{{ $content['name'] }}, PHP Developer in Karur">
+  <meta name="twitter:image" content="{{ asset('image/hero-illustration.png') }}">
+  <meta name="twitter:image:alt" content="Illustration of {{ $content['name'] }}, PHP Developer in Karur">
   <link rel="icon" type="image/png" href="{{ asset('image/icon.png') }}">
   <title>{{ $content['seo_title'] }}</title>
   <link rel="preload" href="{{ asset('assets/fonts/instrumentserif-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ asset('assets/fonts/instrumentserif-latin-400-italic.woff2') }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ asset('assets/fonts/inter-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="{{ asset('style.css') }}">
+  <link rel="stylesheet" href="{{ asset('style.css') }}?v=20261122e">
   @php
     $jobTitle = trim(explode('|', $content['role'])[0]);
     $jobTitle = trim(explode('@', $jobTitle)[0]) ?: $jobTitle;
 
     $siteUrl = url('/');
-    $siteImage = asset('image/vishnupriyan_r.jpg');
+    $siteImage = asset('image/hero-illustration.png');
 
     // PostalAddress built from the location setting, e.g. "Karur, Tamil Nadu, India"
     $locParts = array_map('trim', explode(',', $content['location']));
@@ -185,7 +185,10 @@
         </aside>
 
         <figure class="hero-portrait">
-          <img src="{{ asset('image/vishnupriyan_r.jpg') }}" alt="{{ $content['name'] }}, PHP Developer in Karur, Tamil Nadu" width="1152" height="1440" fetchpriority="high" decoding="async">
+          <picture>
+            <source srcset="{{ asset('image/hero-illustration.webp') }}" type="image/webp">
+            <img src="{{ asset('image/hero-illustration.png') }}" alt="Illustrated portrait of {{ $content['name'] }}, PHP Developer in Karur, Tamil Nadu" width="868" height="1085" fetchpriority="high" decoding="async">
+          </picture>
         </figure>
 
         @foreach (collect($content['skills'])->take(3) as $index => $skill)
