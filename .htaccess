@@ -18,6 +18,10 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
+    # Strip InfinityFree anti-bot challenge counter (?i=1, ?i=2, ...) back to the clean URL
+    RewriteCond %{QUERY_STRING} ^i=[0-9]+$
+    RewriteRule ^$ /? [R=301,L]
+
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
